@@ -54,8 +54,8 @@ export default async function ExpertProfilePage({ params }: Props) {
               <div className="text-sm whitespace-pre-wrap">{wiki.definitions.slice(0, 500)}{wiki.definitions.length > 500 ? '...' : ''}</div>
             </div>
             <div className="mb-4">
-              <h3 className="text-sm font-medium text-[var(--muted-foreground)] mb-2">Taxonomy</h3>
-              <div className="text-sm whitespace-pre-wrap">{wiki.taxonomy.slice(0, 300)}{wiki.taxonomy.length > 300 ? '...' : ''}</div>
+              <h3 className="text-sm font-medium text-[var(--muted-foreground)] mb-2">Entities</h3>
+              <div className="text-sm whitespace-pre-wrap">{wiki.entities.slice(0, 300)}{wiki.entities.length > 300 ? '...' : ''}</div>
             </div>
             <div>
               <h3 className="text-sm font-medium text-[var(--muted-foreground)] mb-2">Known Gaps</h3>

@@ -24,11 +24,10 @@ export async function POST(request: NextRequest) {
       
       for (const gapLine of gapLines) {
         const gapTopic = gapLine.replace('## ', '').trim();
-        await autoFillGap(expertId, {
-          topic: gapTopic,
-          description: `Auto-filled knowledge for: ${gapTopic}`,
-          detectedAt: new Date().toISOString(),
-        });
+        // Only fill unfilled gaps
+        if (!wiki.gaps.includes(`Status: Filled`) || !wiki.gaps.includes(gapTopic)) {
+          await autoFillGap(expertId, gapTopic);
+        }
       }
       
       return NextResponse.json({ success: true, filledCount: gapLines.length });
