@@ -17,7 +17,10 @@ export default function KnowledgePage() {
   const [content, setContent] = useState<WikiContent | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<'definitions' | 'taxonomy' | 'connections' | 'gaps'>('definitions');
+  const [schema, setSchema] = useState<string | null>(null);
+  const [schemaLoading, setSchemaLoading] = useState(false);
+  const [schemaSaving, setSchemaSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState<'definitions' | 'taxonomy' | 'connections' | 'gaps' | 'schema'>('definitions');
   const [newSource, setNewSource] = useState('');
   const [urlInput, setUrlInput] = useState('');
   const [urlLoading, setUrlLoading] = useState(false);
@@ -30,7 +33,47 @@ export default function KnowledgePage() {
 
   useEffect(() => {
     loadWiki();
+    loadSchema();
   }, [expertId]);
+
+  const loadSchema = async () => {
+    try {
+      const res = await fetch(`/api/schema?expertId=${expertId}`);
+      if (res.ok) {
+        const data = await res.json();
+        setSchema(data.schema || '');
+      }
+    } catch (e) { console.error(e); }
+  };
+
+  const handleGenerateSchema = async () => {
+    setSchemaLoading(true);
+    try {
+      const res = await fetch('/api/schema', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ expertId }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSchema(data.schema);
+      }
+    } catch (e) { console.error(e); }
+    finally { setSchemaLoading(false); }
+  };
+
+  const handleSaveSchema = async () => {
+    if (schema === null) return;
+    setSchemaSaving(true);
+    try {
+      await fetch('/api/schema', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ expertId, schema }),
+      });
+    } catch (e) { console.error(e); }
+    finally { setSchemaSaving(false); }
+  };
 
   const loadScore = async () => {
     setScoreLoading(true);
@@ -62,7 +105,7 @@ export default function KnowledgePage() {
       await fetch(`/api/experts/${expertId}/wiki`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ section: activeTab, content: content[activeTab] }),
+        body: JSON.stringify({ section: activeTab, content: content[activeTab as 'definitions' | 'taxonomy' | 'connections' | 'gaps'] }),
       });
     } catch (error) {
       console.error(error);
@@ -126,6 +169,7 @@ export default function KnowledgePage() {
     { key: 'taxonomy', label: 'Taxonomy', icon: '🌳' },
     { key: 'connections', label: 'Connections', icon: '🔗' },
     { key: 'gaps', label: 'Gaps', icon: '🔍' },
+    { key: 'schema', label: 'Schema', icon: '⚙️' },
   ] as const;
 
   return (
@@ -191,12 +235,37 @@ export default function KnowledgePage() {
               </button>
             </div>
 
+            {activeTab === 'schema' ? (
+              <div>
+                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                  <button onClick={handleGenerateSchema} disabled={schemaLoading} className="btn btn-secondary btn-sm">
+                    {schemaLoading ? 'Generating...' : schema ? 'Regenerate' : 'Generate Schema'}
+                  </button>
+                  {schema && (
+                    <button onClick={handleSaveSchema} disabled={schemaSaving} className="btn btn-primary btn-sm">
+                      {schemaSaving ? 'Saving...' : 'Save Schema'}
+                    </button>
+                  )}
+                </div>
+                {schema === null ? (
+                  <p style={{ color: 'var(--muted-foreground)', fontSize: '0.875rem' }}>No schema yet. Click Generate to create one from your wiki content.</p>
+                ) : (
+                  <textarea
+                    className="textarea"
+                    style={{ minHeight: '480px', fontFamily: 'monospace', fontSize: '0.875rem', lineHeight: 1.6 }}
+                    value={schema}
+                    onChange={(e) => setSchema(e.target.value)}
+                  />
+                )}
+              </div>
+            ) : (
             <textarea
               className="textarea"
               style={{ minHeight: '480px', fontFamily: 'monospace', fontSize: '0.875rem', lineHeight: 1.6 }}
-              value={content[activeTab]}
+              value={content[activeTab as 'definitions' | 'taxonomy' | 'connections' | 'gaps']}
               onChange={(e) => setContent({ ...content, [activeTab]: e.target.value })}
             />
+            )}
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>

@@ -56,3 +56,14 @@ Keep it concise (under 400 words). Write it as a practical guide for the LLM.`;
 
   return NextResponse.json({ success: true, schema });
 }
+
+// PUT: save manually edited schema
+export async function PUT(request: NextRequest) {
+  const { expertId, schema } = await request.json();
+  if (!expertId || schema === undefined) {
+    return NextResponse.json({ error: 'expertId and schema required' }, { status: 400 });
+  }
+  const schemaPath = path.join(DATA_DIR, expertId, 'SCHEMA.md');
+  fs.writeFileSync(schemaPath, schema);
+  return NextResponse.json({ success: true });
+}
