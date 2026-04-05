@@ -19,6 +19,8 @@ export default function KnowledgePage() {
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<'definitions' | 'taxonomy' | 'connections' | 'gaps'>('definitions');
   const [newSource, setNewSource] = useState('');
+  const [urlInput, setUrlInput] = useState('');
+  const [urlLoading, setUrlLoading] = useState(false);
 
   useEffect(() => {
     loadWiki();
@@ -165,6 +167,40 @@ export default function KnowledgePage() {
         </div>
 
         <div className="space-y-6">
+          <div className="card">
+            <h3 className="font-semibold mb-4">🔗 Import from URL</h3>
+            <input
+              className="input mb-3 w-full"
+              placeholder="https://... paste any article, blog post, or tweet"
+              value={urlInput}
+              onChange={(e) => setUrlInput(e.target.value)}
+            />
+            <button
+              onClick={async () => {
+                if (!urlInput.trim()) return;
+                setUrlLoading(true);
+                try {
+                  await fetch('/api/fetch-url', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ expertId: id, url: urlInput.trim() }),
+                  });
+                  setUrlInput('');
+                  // refresh wiki content
+                  const r = await fetch(`/api/experts/${id}/wiki`);
+                  const d = await r.json();
+                  setContent(d);
+                } finally {
+                  setUrlLoading(false);
+                }
+              }}
+              disabled={!urlInput.trim() || urlLoading}
+              className="btn btn-primary w-full"
+            >
+              {urlLoading ? 'Fetching...' : 'Import URL'}
+            </button>
+          </div>
+
           <div className="card">
             <h3 className="font-semibold mb-4">📥 Add Knowledge</h3>
             <textarea
