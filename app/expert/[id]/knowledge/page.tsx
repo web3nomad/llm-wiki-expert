@@ -104,17 +104,17 @@ export default function KnowledgePage() {
 
   if (loading) {
     return (
-      <div className="text-center py-12">
-        <div className="animate-pulse text-[var(--muted-foreground)]">Loading knowledge base...</div>
+      <div style={{ textAlign: 'center', paddingTop: '4rem', paddingBottom: '4rem' }}>
+        <div className="animate-pulse" style={{ color: 'var(--muted-foreground)', fontSize: '0.9375rem' }}>Loading knowledge base...</div>
       </div>
     );
   }
 
   if (!content) {
     return (
-      <div className="text-center py-12">
-        <p className="text-[var(--muted-foreground)]">Failed to load knowledge base</p>
-        <Link href={`/expert/${expertId}`} className="text-[var(--primary)] mt-2 inline-block">
+      <div style={{ textAlign: 'center', paddingTop: '4rem', paddingBottom: '4rem' }}>
+        <p style={{ color: 'var(--muted-foreground)', fontSize: '0.9375rem', marginBottom: '1rem' }}>Failed to load knowledge base</p>
+        <Link href={`/expert/${expertId}`} style={{ color: 'var(--primary)', textDecoration: 'none' }}>
           Back to profile
         </Link>
       </div>
@@ -130,42 +130,55 @@ export default function KnowledgePage() {
 
   return (
     <div className="animate-fade-in">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <Link 
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', paddingBottom: '1rem', borderBottom: '1px solid var(--border)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <Link
             href={`/expert/${expertId}`}
-            className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+            style={{ fontSize: '0.875rem', color: 'var(--muted-foreground)', textDecoration: 'none' }}
           >
-            ← Back to profile
+            ← Back
           </Link>
-          <h1 className="text-xl font-semibold">Knowledge Base</h1>
+          <h1 style={{ fontSize: '1.125rem', fontWeight: 400, letterSpacing: '-0.01em', color: 'var(--foreground)' }}>Knowledge Base</h1>
         </div>
-        <div className="flex gap-2">
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
           <Link href={`/expert/${expertId}/graph`} className="btn btn-secondary btn-sm">
-            🕸️ Graph
+            Graph
           </Link>
           <Link href={`/expert/${expertId}/chat`} className="btn btn-primary btn-sm">
-            💬 Chat
+            Chat
           </Link>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
+        <style>{`
+          @media (min-width: 1024px) {
+            .knowledge-grid {
+              grid-template-columns: 2fr 1fr;
+            }
+          }
+        `}</style>
+        <div className="knowledge-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
           <div className="card">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex gap-1">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', gap: '0.25rem' }}>
                 {tabs.map(tab => (
                   <button
                     key={tab.key}
                     onClick={() => setActiveTab(tab.key)}
-                    className={`px-3 py-2 text-sm rounded-lg transition-colors ${
-                      activeTab === tab.key
-                        ? 'bg-[var(--primary)] text-white'
-                        : 'text-[var(--muted-foreground)] hover:bg-[var(--secondary)]'
-                    }`}
+                    style={{
+                      padding: '0.5rem 0.875rem',
+                      fontSize: '0.8125rem',
+                      borderRadius: '4px',
+                      border: 'none',
+                      background: activeTab === tab.key ? 'var(--primary)' : 'transparent',
+                      color: activeTab === tab.key ? 'white' : 'var(--muted-foreground)',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      fontWeight: activeTab === tab.key ? 500 : 400,
+                    }}
                   >
-                    {tab.icon} {tab.label}
+                    {tab.label}
                   </button>
                 ))}
               </div>
@@ -179,16 +192,17 @@ export default function KnowledgePage() {
             </div>
 
             <textarea
-              className="textarea min-h-[400px] font-mono text-sm"
+              className="textarea"
+              style={{ minHeight: '480px', fontFamily: 'monospace', fontSize: '0.875rem', lineHeight: 1.6 }}
               value={content[activeTab]}
               onChange={(e) => setContent({ ...content, [activeTab]: e.target.value })}
             />
           </div>
-        </div>
 
-        <div className="space-y-6">
-          <div className="card">
-            <h3 className="font-semibold mb-4">🔗 Import from URL</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+
+            <div className="card">
+              <h3 style={{ fontSize: '0.9375rem', fontWeight: 500, marginBottom: '1rem', color: 'var(--foreground)', letterSpacing: '-0.01em' }}>Import from URL</h3>
             <input
               className="input mb-3 w-full"
               placeholder="https://... paste any article, blog post, or tweet"
@@ -221,8 +235,8 @@ export default function KnowledgePage() {
             </button>
           </div>
 
-          <div className="card">
-            <h3 className="font-semibold mb-4">📥 Add Knowledge</h3>
+            <div className="card">
+              <h3 style={{ fontSize: '0.9375rem', fontWeight: 500, marginBottom: '1rem', color: 'var(--foreground)', letterSpacing: '-0.01em' }}>Add Knowledge</h3>
             <textarea
               className="textarea mb-3"
               placeholder="Paste content or notes to add to the knowledge base..."
@@ -239,11 +253,11 @@ export default function KnowledgePage() {
             </button>
           </div>
 
-          <div className="card">
-            <h3 className="font-semibold mb-4">🔧 Gap Management</h3>
-            <p className="text-sm text-[var(--muted-foreground)] mb-4">
-              Automatically generate content to fill detected knowledge gaps.
-            </p>
+            <div className="card">
+              <h3 style={{ fontSize: '0.9375rem', fontWeight: 500, marginBottom: '1rem', color: 'var(--foreground)', letterSpacing: '-0.01em' }}>Gap Management</h3>
+              <p style={{ fontSize: '0.875rem', color: 'var(--muted-foreground)', marginBottom: '1rem', lineHeight: 1.5 }}>
+                Automatically generate content to fill detected knowledge gaps.
+              </p>
             <button
               onClick={handleAutoFillGaps}
               disabled={saving}
@@ -253,59 +267,60 @@ export default function KnowledgePage() {
             </button>
           </div>
 
-          <div className="card">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold">🏆 WikiScore</h3>
-              <button onClick={loadScore} disabled={scoreLoading}
-                className="btn btn-secondary btn-sm text-xs">
-                {scoreLoading ? 'Scoring...' : 'Score'}
-              </button>
-            </div>
-            {wikiScore ? (
-              <div>
-                <div className="flex items-end gap-2 mb-2">
-                  <span className="text-3xl font-bold">{Math.round(wikiScore.score * 100)}</span>
-                  <span className="text-sm text-[var(--muted-foreground)] mb-1">/ 100 · {wikiScore.label}</span>
-                </div>
-                <div className="w-full bg-[var(--secondary)] rounded-full h-1.5 mb-3">
-                  <div className="bg-[var(--primary)] h-1.5 rounded-full transition-all"
-                    style={{ width: `${wikiScore.score * 100}%` }} />
-                </div>
-                <div className="space-y-1 text-xs text-[var(--muted-foreground)]">
-                  {Object.entries(wikiScore.breakdown).map(([k, v]) => (
-                    <div key={k} className="flex justify-between">
-                      <span className="capitalize">{k}</span>
-                      <span>{Math.round((v as number) * 100)}%</span>
-                    </div>
-                  ))}
-                </div>
-                {wikiScore.summary && (
-                  <p className="text-xs text-[var(--muted-foreground)] mt-2 italic">{wikiScore.summary}</p>
-                )}
+            <div className="card">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                <h3 style={{ fontSize: '0.9375rem', fontWeight: 500, color: 'var(--foreground)', letterSpacing: '-0.01em' }}>WikiScore</h3>
+                <button onClick={loadScore} disabled={scoreLoading}
+                  className="btn btn-secondary btn-sm"
+                  style={{ fontSize: '0.75rem' }}>
+                  {scoreLoading ? 'Scoring...' : 'Score'}
+                </button>
               </div>
-            ) : (
-              <p className="text-xs text-[var(--muted-foreground)]">Click Score to evaluate wiki quality</p>
-            )}
+              {wikiScore ? (
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'end', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                    <span style={{ fontSize: '2rem', fontWeight: 500, color: 'var(--foreground)', letterSpacing: '-0.02em' }}>{Math.round(wikiScore.score * 100)}</span>
+                    <span style={{ fontSize: '0.875rem', color: 'var(--muted-foreground)', marginBottom: '0.25rem' }}>/ 100 · {wikiScore.label}</span>
+                  </div>
+                  <div style={{ width: '100%', background: 'var(--border)', borderRadius: '4px', height: '6px', marginBottom: '1rem' }}>
+                    <div style={{ background: 'var(--primary)', height: '6px', borderRadius: '4px', width: `${wikiScore.score * 100}%`, transition: 'width 0.3s ease' }} />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem', fontSize: '0.8125rem', color: 'var(--muted-foreground)' }}>
+                    {Object.entries(wikiScore.breakdown).map(([k, v]) => (
+                      <div key={k} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <span style={{ textTransform: 'capitalize' }}>{k}</span>
+                        <span>{Math.round((v as number) * 100)}%</span>
+                      </div>
+                    ))}
+                  </div>
+                  {wikiScore.summary && (
+                    <p style={{ fontSize: '0.8125rem', color: 'var(--muted-foreground)', marginTop: '0.75rem', fontStyle: 'italic', lineHeight: 1.5 }}>{wikiScore.summary}</p>
+                  )}
+                </div>
+              ) : (
+                <p style={{ fontSize: '0.8125rem', color: 'var(--muted-foreground)' }}>Click Score to evaluate wiki quality</p>
+              )}
           </div>
 
-          <div className="card">
-            <h3 className="font-semibold mb-4">📊 Knowledge Stats</h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-[var(--muted-foreground)]">Definitions</span>
-                <span>{(content.definitions || "").split('\n').filter(l => l.trim()).length} items</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[var(--muted-foreground)]">Taxonomy</span>
-                <span>{(content.taxonomy || "").split('\n').filter(l => l.trim()).length} items</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[var(--muted-foreground)]">Connections</span>
-                <span>{(content.connections || "").split('\n').filter(l => l.trim()).length} items</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[var(--muted-foreground)]">Gaps</span>
-                <span className="text-yellow-500">{(content.gaps || "").split('\n').filter(l => l.trim()).length} detected</span>
+            <div className="card">
+              <h3 style={{ fontSize: '0.9375rem', fontWeight: 500, marginBottom: '1rem', color: 'var(--foreground)', letterSpacing: '-0.01em' }}>Knowledge Stats</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.875rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--muted-foreground)' }}>Definitions</span>
+                  <span style={{ color: 'var(--foreground)' }}>{(content.definitions || "").split('\n').filter(l => l.trim()).length} items</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--muted-foreground)' }}>Taxonomy</span>
+                  <span style={{ color: 'var(--foreground)' }}>{(content.taxonomy || "").split('\n').filter(l => l.trim()).length} items</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--muted-foreground)' }}>Connections</span>
+                  <span style={{ color: 'var(--foreground)' }}>{(content.connections || "").split('\n').filter(l => l.trim()).length} items</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--muted-foreground)' }}>Gaps</span>
+                  <span style={{ color: '#d97706' }}>{(content.gaps || "").split('\n').filter(l => l.trim()).length} detected</span>
+                </div>
               </div>
             </div>
           </div>

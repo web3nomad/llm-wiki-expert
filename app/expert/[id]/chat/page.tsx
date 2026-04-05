@@ -56,24 +56,16 @@ export default function ChatPage() {
     <div className="animate-fade-in" style={{ height: 'calc(100vh - 130px)', display: 'flex', flexDirection: 'column' }}>
 
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexShrink: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <Link href={`/expert/${expertId}`} style={{ fontSize: '0.8125rem', color: 'var(--muted-foreground)', textDecoration: 'none' }}>
-            ← back
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexShrink: 0, paddingBottom: '1rem', borderBottom: '1px solid var(--border)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <Link href={`/expert/${expertId}`} style={{ fontSize: '0.875rem', color: 'var(--muted-foreground)', textDecoration: 'none' }}>
+            ← Back
           </Link>
-          <span style={{ fontSize: '0.8125rem', color: 'var(--muted-foreground)' }}>Chat</span>
+          <span style={{ fontSize: '0.875rem', color: 'var(--foreground)', fontWeight: 400, letterSpacing: '-0.01em' }}>Chat</span>
         </div>
         {allGaps.length > 0 && (
           <Link href={`/expert/${expertId}/knowledge`} style={{ textDecoration: 'none' }}>
-            <span style={{
-              fontSize: '0.6875rem',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              color: 'var(--primary)',
-              border: '1px solid rgba(232,160,74,0.3)',
-              borderRadius: '2px',
-              padding: '0.2rem 0.5rem',
-            }}>
+            <span className="badge badge-warning">
               {allGaps.length} gap{allGaps.length > 1 ? 's' : ''} detected
             </span>
           </Link>
@@ -85,39 +77,43 @@ export default function ChatPage() {
         flex: 1,
         overflowY: 'auto',
         paddingRight: '0.5rem',
-        marginBottom: '1.25rem',
+        marginBottom: '1.5rem',
       }}>
         {messages.length === 0 ? (
-          <div style={{ paddingTop: '4rem', color: 'var(--muted-foreground)', fontSize: '0.875rem' }}>
+          <div style={{ paddingTop: '6rem', textAlign: 'center', color: 'var(--muted-foreground)', fontSize: '0.9375rem' }}>
             Ask anything — the wiki knows what it knows.
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
             {messages.map((msg, i) => (
               <div key={i}>
                 {msg.role === 'user' ? (
-                  /* User message — right-aligned, amber left border */
-                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  /* User message — clean, no bubble */
+                  <div>
                     <div style={{
-                      maxWidth: '70%',
-                      padding: '0.75rem 1rem',
-                      background: 'rgba(232,160,74,0.08)',
-                      borderLeft: '2px solid var(--primary)',
-                      borderRadius: '0 3px 3px 0',
-                      fontSize: '0.875rem',
-                      lineHeight: 1.6,
+                      fontSize: '0.75rem',
+                      letterSpacing: '0.02em',
+                      color: 'var(--muted-foreground)',
+                      marginBottom: '0.5rem',
+                      fontWeight: 500,
+                    }}>
+                      You
+                    </div>
+                    <div style={{
+                      fontSize: '0.9375rem',
+                      lineHeight: 1.65,
+                      color: 'var(--foreground)',
                       whiteSpace: 'pre-wrap',
                     }}>
                       {msg.content}
                     </div>
                   </div>
                 ) : (
-                  /* Assistant message — left-aligned, indented, typographic */
-                  <div style={{ paddingLeft: '1rem', borderLeft: '1px solid rgba(240,239,232,0.08)' }}>
+                  /* Assistant message — typographic, editorial */
+                  <div>
                     <div style={{
-                      fontSize: '0.6875rem',
-                      letterSpacing: '0.08em',
-                      textTransform: 'uppercase',
+                      fontSize: '0.75rem',
+                      letterSpacing: '0.02em',
                       color: 'var(--muted-foreground)',
                       marginBottom: '0.5rem',
                       fontWeight: 500,
@@ -125,8 +121,8 @@ export default function ChatPage() {
                       Wiki
                     </div>
                     <div style={{
-                      fontSize: '0.9375rem',
-                      lineHeight: 1.75,
+                      fontSize: '1rem',
+                      lineHeight: 1.7,
                       color: 'var(--foreground)',
                       whiteSpace: 'pre-wrap',
                     }}>
@@ -134,8 +130,8 @@ export default function ChatPage() {
                     </div>
                     {msg.gaps && msg.gaps.length > 0 && (
                       <div style={{
-                        marginTop: '0.75rem',
-                        fontSize: '0.75rem',
+                        marginTop: '0.875rem',
+                        fontSize: '0.8125rem',
                         color: 'var(--muted-foreground)',
                         fontStyle: 'italic',
                       }}>
@@ -147,20 +143,22 @@ export default function ChatPage() {
               </div>
             ))}
             {loading && (
-              <div style={{ paddingLeft: '1rem', borderLeft: '1px solid rgba(240,239,232,0.08)' }}>
+              <div>
                 <div style={{
-                  fontSize: '0.6875rem',
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.02em',
                   color: 'var(--muted-foreground)',
                   marginBottom: '0.5rem',
-                }}>Wiki</div>
-                <div style={{ display: 'flex', gap: '4px', alignItems: 'center', height: '20px' }}>
+                  fontWeight: 500,
+                }}>
+                  Wiki
+                </div>
+                <div style={{ display: 'flex', gap: '6px', alignItems: 'center', height: '24px' }}>
                   {[0, 150, 300].map(delay => (
                     <span key={delay} className="animate-pulse" style={{
-                      width: '5px', height: '5px',
+                      width: '6px', height: '6px',
                       borderRadius: '50%',
-                      background: 'var(--muted-foreground)',
+                      background: 'var(--border-strong)',
                       animationDelay: `${delay}ms`,
                       display: 'inline-block',
                     }} />

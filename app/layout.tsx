@@ -16,25 +16,23 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className="min-h-screen">
-          <header style={{ borderBottom: '1px solid rgba(240,239,232,0.08)' }}>
-            <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+          <header style={{ borderBottom: '1px solid var(--border)' }}>
+            <div style={{ maxWidth: '960px', margin: '0 auto', padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <Link href="/" style={{ textDecoration: 'none' }}>
                 <span style={{
-                  fontSize: '0.8125rem',
-                  fontWeight: 500,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
+                  fontSize: '0.875rem',
+                  fontWeight: 400,
+                  letterSpacing: '-0.01em',
                   color: 'var(--foreground)',
-                  opacity: 0.9,
                 }}>
                   LLM Wiki Expert
                 </span>
               </Link>
-              <nav className="flex items-center gap-6">
+              <nav style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
                 <Link
                   href="/"
                   style={{
-                    fontSize: '0.8125rem',
+                    fontSize: '0.875rem',
                     color: 'var(--muted-foreground)',
                     textDecoration: 'none',
                   }}
@@ -47,7 +45,7 @@ export default function RootLayout({
               </nav>
             </div>
           </header>
-          <main className="max-w-5xl mx-auto px-6 py-10">
+          <main style={{ maxWidth: '960px', margin: '0 auto', padding: '3rem 1.5rem' }}>
             {children}
           </main>
         </div>
