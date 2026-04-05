@@ -17,6 +17,31 @@ function chunkText(text: string, chunkSize = CHUNK_SIZE): string[] {
 }
 
 // Extract knowledge from each chunk, then merge with a final LLM pass
+// Strategy 2: recursive summary tree (h/t @antilukalister)
+// Convert to sections → summarize each → meta-summary
+// Better for preserving document structure
+async function extractWithSummaryTree(text: string, url: string): Promise<string> {
+  // Split by natural section boundaries (double newlines, heading patterns)
+  const sections = text.split(/\n\n+/).filter(s => s.trim().length > 100);
+  if (sections.length <= 3) {
+    return callLLM(
+      `Extract key knowledge from this web page for a wiki.\nSource: ${url}\n\n${text}`,
+      { maxTokens: 2048, temperature: 0.3 }
+    );
+  }
+  // Summarize each section
+  const summaries = await Promise.all(
+    sections.slice(0, 12).map(section =>
+      callLLM(`One-sentence summary of key fact/insight:\n${section}`, { maxTokens: 100, temperature: 0.2 })
+    )
+  );
+  // Meta-summary into wiki entry
+  return callLLM(
+    `Turn these section summaries into a structured wiki entry.\nSource: ${url}\n\n${summaries.map((s, i) => `${i + 1}. ${s}`).join('\n')}`,
+    { maxTokens: 2048, temperature: 0.3 }
+  );
+}
+
 async function extractWithChunking(text: string, url: string): Promise<string> {
   const chunks = chunkText(text);
   if (chunks.length === 1) {
@@ -73,8 +98,11 @@ export async function POST(request: NextRequest) {
       .trim()
       .slice(0, 8000); // limit to avoid token overflow
 
-    // Extract with chunking support for long pages
-    const extracted = await extractWithChunking(text, url);
+    // Use summary tree for structured docs (>3 sections), chunking for dense text
+    const sections = text.split(/\n\n+/).filter(s => s.trim().length > 100);
+    const extracted = sections.length > 3
+      ? await extractWithSummaryTree(text, url)
+      : await extractWithChunking(text, url);
 
     // Add to wiki
     const sourceContent = `# From URL: ${url}\n\n${extracted}`;
