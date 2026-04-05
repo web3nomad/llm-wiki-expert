@@ -125,9 +125,14 @@ export default function KnowledgePage() {
           </Link>
           <h1 className="text-xl font-semibold">Knowledge Base</h1>
         </div>
-        <Link href={`/expert/${expertId}/chat`} className="btn btn-primary btn-sm">
-          💬 Chat
-        </Link>
+        <div className="flex gap-2">
+          <Link href={`/expert/${expertId}/graph`} className="btn btn-secondary btn-sm">
+            🕸️ Graph
+          </Link>
+          <Link href={`/expert/${expertId}/chat`} className="btn btn-primary btn-sm">
+            💬 Chat
+          </Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
