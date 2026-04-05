@@ -22,6 +22,15 @@ One of four key principles for personal knowledge systems, emphasizing that user
 ### Recursive Summarization
 A technique for processing long-form documents (particularly PDFs) in the LLM Wiki pattern. The approach works by first converting PDF pages to markdown, then summarizing each page individually, and finally summarizing those summaries to create a consolidated overview. This preserves the document's structural hierarchy while extracting key information for the knowledge base.
 
+### Schema Layer
+A configuration document (such as CLAUDE.md or AGENTS.md) that transforms an LLM into a disciplined wiki maintainer. The schema file defines wiki structure, conventions, and workflows for ingesting sources, answering questions, and maintaining the wiki. It is co-evolved by the user and LLM over time, serving as the key configuration that disciplines the LLM's behavior within the knowledge base.
+
+### File-Back Principle
+A critical insight from the LLM Wiki pattern: query answers should be filed back into the wiki as new pages rather than lost in chat history. When you ask the LLM to synthesize information, compare concepts, or analyze connections, those outputs become new knowledge entries that compound just like ingested sources. This creates a virtuous cycle where every question enriches the wiki.
+
+### LLM Bookkeeping
+One of the key advantages of the wiki-style knowledge base is that LLMs handle the tedious bookkeeping that humans typically avoid—including cross-referencing across many files, maintaining consistency, tracking contradictions, and building connections between disparate pieces of knowledge.
+
 ## Key Principles
 
 ### Explicit
@@ -71,6 +80,18 @@ A project that converted 480,000 words into 20,000 navigable memories with a vis
 ### iMessage
 Apple's instant messaging service that, alongside diary entries and Apple Notes, can serve as a source input for personal knowledge bases in the LLM Wiki pattern.
 
+### Vannevar Bush
+American engineer and science administrator who conceptualized the Memex, a hypothetical electromechanical device that would make/enable new forms of research and knowledge organization. His 1945 essay "As We May Think" envisioned a system for individuals to store and retrieve information, providing a conceptual predecessor to modern wiki-style knowledge management systems.
+
+### Memex
+A hypothetical device described by Vannevar Bush in his 1945 essay "As We May Think" that would allow users to store, retrieve, and link documents mechanically. The Memex concept envisioned associative indexing and knowledge trails, predating and inspiring modern hypertext, wikis, and personal knowledge management systems.
+
+### Index.md
+A navigation file in the LLM Wiki structure that serves content browsing and discovery, providing an entry point for navigating the wiki's organized knowledge.
+
+### Log.md
+A chronological append-only record in the LLM Wiki structure that maintains a time-ordered history of wiki activities, sources processed, and updates made over time.
+
 ## Architecture
 
 ### Directory Structure
@@ -82,6 +103,10 @@ A wiki-style knowledge base typically separates:
   - **sources.md**: Index and metadata for all source documents
   - **comparisons.md**: Side-by-side analyses and contrasts between related concepts
 
+Additionally, the wiki typically maintains:
+- **Index.md**: Navigation file serving content browsing and discovery
+- **Log.md**: Chronological append-only record of wiki activities and updates
+
 This separation allows LLMs to incrementally update concepts without overwriting existing knowledge, maintaining an audit trail and preventing data loss. The core principle: LLMs merge new information into existing files—never overwrites, always compounds.
 
 ### Three-Layer Architecture
@@ -92,9 +117,9 @@ The LLM Wiki pattern employs a three-layer structure:
 
 ### Three Core Operations
 The LLM Wiki methodology supports three fundamental operations:
-- **Ingest**: Process new sources into the wiki, converting raw data into structured knowledge entries. A single source might touch 10-15 wiki pages, updating summaries, entity pages, and cross-references.
-- **Query**: Answer questions against the wiki by referencing existing structured knowledge. The LLM reads relevant concepts, synthesizes an answer with citations, detects gaps, and records them for future filling. Key insight: Good answers should be filed back into the wiki as new pages—a comparison you asked for, an analysis, a connection you discovered—allowing explorations to compound just like ingested sources.
-- **Lint**: Health-check the wiki for contradictions, stale content, orphaned entries, missing cross-references, and data gaps that could be filled with a web search.
+- **Ingest**: Process new sources into the wiki, converting raw data into structured knowledge entries. A single source might touch 10-15 wiki pages, updating summaries, entity pages, and cross-references. This includes reading the source, discussing key takeaways, writing summary pages, updating the index, updating relevant entity and concept pages, and appending to the log.
+- **Query**: Answer questions against the wiki by referencing existing structured knowledge. The LLM reads relevant concepts, synthesizes an answer with citations, detects gaps, and records them for future filling. Supports multiple output formats including markdown. Key insight: Good answers should be filed back into the wiki as new pages—a comparison you asked for, an analysis, a connection you discovered—allowing explorations to compound just like ingested sources.
+- **Lint**: Health-check the wiki for contradictions, stale content, orphaned entries, missing cross-references, and data gaps that could be filled with a web search. This operation ensures wiki integrity and identifies areas requiring attention.
 
 ### Recursive Summarization Technique
 For processing long-form documents, particularly PDFs, the LLM Wiki pattern employs recursive summarization:
@@ -144,6 +169,9 @@ Building expansive personal knowledge bases that scale to hundreds of thousands 
 ### Browser-Based Implementations
 Running wiki-style knowledge bases entirely in the browser without backend infrastructure. VaultMind demonstrates this approach with a single HTML implementation supporting PDF uploads, URL ingestion, voice memos, and drag-and-drop file handling with live knowledge graph visualization.
 
+### Conceptual Precedents
+While modern LLM-powered wikis represent a new implementation, the underlying concept draws from Vannevar Bush's vision of the Memex—an associative system for storing and retrieving knowledge that anticipated hypertext and modern knowledge management tools. The LLM Wiki pattern can be seen as a realization of Bush's vision, enabled by artificial intelligence.
+
 ## From gist.github.com (2026-04-05)
 
 # LLM Wiki - Personal Knowledge Base Pattern
@@ -184,161 +212,24 @@ Instead of just retrieving from raw documents at query time, the LLM:
 |-----------------|----------|
 | Re-derives knowledge on every query | Knowledge compiled once, kept current |
 | No persistence between sessions | Persistent, compounding artifact |
-| Cross-references created per-query | Cross-references already exist |
-| Contradictions flagged per-query | Contradictions already flagged |
+| Cross-re
 
----
+## Key insights from re-reading the full Karpathy LLM...
 
-## Practical Setup
+Key insights from re-reading the full Karpathy LLM Wiki gist:
 
-```
-┌─────────────────────┐      ┌─────────────────────┐
-│   LLM Agent         │      │   Obsidian          │
-│   (Programmer)      │ ←──→ │   (IDE)             │
-│                     │      │                     │
-│ - Summarizes        │      │ - Browse results    │
-│ - Cross-references  |      │ - Follow links      │
-│ - Files and books  |      │ - Graph view        │
-└─────────────────────┘      └─────────────────────┘
-```
+1. The schema file is THE key config. Not just structure — it is how the LLM becomes a disciplined wiki maintainer rather than a generic chatbot. You and the LLM co-evolve the schema over time.
 
-- **Obsidian** = IDE (Integrated Development Environment)
-- **LLM** = Programmer
-- **Wiki** = Codebase
+2. Three operations: Ingest / Query / Lint. Each has specific behaviors. Ingest touches 10-15 pages per source. Query can output to different formats (markdown, comparison table, Marp slides, matplotlib). Lint finds contradictions, orphans, stale claims, gaps.
 
----
+3. File-back is critical: good answers should be filed back into the wiki. Chat answers that disappear into history are wasted synthesis.
 
-## Use Cases
+4. Index.md is content-oriented (catalog of pages). Log.md is chronological (append-only record). They serve different purposes — index for navigation, log for history.
 
-### Personal
-- Tracking goals, health, psychology, self-improvement
-- Filing journal entries, articles, podcast notes
-- Building a structured picture of yourself over time
+5. Human role: curate sources, direct analysis, ask good questions. LLM role: everything else — summarizing, cross-referencing, filing, bookkeeping.
 
-### Research
-- Going deep on a topic over weeks or months
-- Reading papers, articles, reports
-- Incrementally building a comprehensive wiki with an evolving thesis
+6. The tedious part of maintaining a knowledge base is the bookkeeping. LLMs dont get bored, dont forget cross-references, can touch 15 files in one pass.
 
-### Reading a Book
-- Filing each chapter as you go
-- Building pages for characters, themes, plot threads
-- Connecting everything by the end
-- Result: A rich companion wiki (like Tolkien Gateway, but personal)
+7. Vannevar Bush Memex (1945) connection: private, actively curated, with the connections between documents as valuable as the documents themselves. The part Bush could not solve was who does the maintenance. The LLM handles that.
 
-### Business/Team
-- Internal wiki maintained by LLMs
-- Fed by Slack threads, meeting transcripts, project documents, customer calls
-- Humans in the loop reviewing updates
-- **Use cases:** Competitive analysis, due diligence, trip planning, course notes, hobby deep-dives
-
----
-
-## Architecture
-
-### Three Layers
-
-```
-┌────────────────────────────────────────────────────────────┐
-│                    SCHEMA (CLAUDE.md / AGENTS.md)          │
-│  Tells the LLM how the wiki is structured, conventions,    │
-│  and workflows for ingesting sources, answering questions, │
-│  and maintaining the wiki                                  │
-├────────────────────────────────────────────────────────────┤
-│                         WIKI                               │
-│  Directory of LLM-generated markdown files:                │
-│  - Summaries                                               │
-│  - Entity pages                                            │
-│  - Concept pages                                           │
-│  - Comparisons                                             │
-│  - Overview, synthesis                                      │
-│  LLM owns this layer entirely (reads; writes)              │
-├────────────────────────────────────────────────────────────┤
-│                      RAW SOURCES                            │
-│  Curated collection of source documents:                    │
-│  - Articles, papers, images, data files                     │
-│  Immutable — LLM reads but never modifies                   │
-│  This is the source of truth                                │
-└────────────────────────────────────────────────────────────┘
-```
-
-### The Schema Layer
-
-- A configuration document (e.g., `CLAUDE.md` for Claude Code, `AGENTS.md` for Codex)
-- Defines:
-  - Wiki structure
-  - Conventions
-  - Workflows for ingesting sources
-  - Workflows for answering questions
-  - Workflows for maintaining the wiki
-- **Co-evolved** by user and LLM over time
-
-### The Four Concept Files
-
-The concepts directory typically maintains four core files:
-- **definitions.md**: Key concept definitions and explanations
-- **entities.md**: Detailed entries for people, places, organizations, and things
-- **sources.md**: Index and metadata for all source documents
-- **comparisons.md**: Side-by-side analyses and contrasts between related concepts
-
----
-
-## Operations
-
-### 1. Ingest
-
-**Process:** Add a new source → LLM processes it
-
-**Example flow:**
-1. Drop a new source into the raw collection
-2. Tell the LLM to process it
-3. LLM reads the source
-4. LLM discusses key takeaways with you
-5. LLM writes a summary page in the wiki
-6. LLM updates the index
-7. LLM updates relevant entity and concept pages across the wiki
-8. LLM appends an entry to the log
-
-**Scope:** A single source might touch 10-15 wiki pages
-
-**Workflow options:**
-- **Preferred approach:** Ingest sources one at a time, stay involved
-  - Read summaries, check updates, guide LLM on emphasis
-- **Alternative:** Batch-ingest many sources with less supervision
-
-**Recursive Summarization for Documents:**
-For long-form documents like PDFs, the recursive summarization approach:
-1. Convert PDF pages to markdown
-2. Summarize each page individually
-3. Summarize the summaries to create a consolidated overview
-4. Preserve structural hierarchy throughout
-
-### 2. Query
-
-**Process:** Ask questions against the wiki
-
-**Flow:**
-1. LLM searches for relevant pages
-2. LLM reads them
-3. LLM synthesizes an answer with citations
-4. LLM detects gaps and records them for future filling
-
-**Answer formats:**
-- Markdown
-
-## Farzapedia case study:
-@FarzaTV built personal Wik...
-
-Farzapedia case study:
-@FarzaTV built personal Wikipedia from 2500 diary entries + Apple Notes + iMessage conversations. Generated 400 detailed articles covering friends, startups, research areas, favorite animes and their impact.
-
-Karpathy commented: This is what explicit memory looks like. The memory artifact is explicit and navigable. You can see exactly what the AI knows. Data is yours, on your local computer. Files are simple markdown - interoperable with any tool.
-
-Recursive summary tree approach (from @antilukalister):
-For PDFs and long documents: convert each page to MD → summarize each page → summarize all summaries. Better than chunking because it preserves document structure.
-
-VaultMind project: full Karpathy wiki pattern in browser, zero backend, single HTML file. Supports PDF drop, URL paste, voice memo, file drag. Knowledge graph updates live.
-
-LOTR Memory Explorer (@cludeproject / @sebbsssss): 480,000 words from Lord of the Rings trilogy converted to 20,000 navigable memories. Visual graph of lore, memory, meaning. Example of what explicit memory visualization can look like at scale.
-
-Obsidian integration: wiki files with YAML frontmatter and [[wiki links]] drop directly into Obsidian vault. Graph view works out of the box. Unix philosophy: files are interoperable with everything.
+8. The wiki is just a git repo of markdown files. Version history, branching, collaboration for free.

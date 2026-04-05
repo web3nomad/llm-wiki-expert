@@ -32,6 +32,8 @@ Comparisons and contrasts between concepts.
 | **Wiki Layer** | Structured markdown files containing curated knowledge | Interconnected articles |
 | **Raw Sources** | Immutable source documents | Original diary entries, notes, messages |
 
+The schema file is the key configuration that transforms an LLM into a disciplined wiki maintainer through co-evolution. Index.md serves content navigation while Log.md maintains chronological append-only records.
+
 ### Wiki Directory Structure
 
 The wiki uses a two-directory architecture to separate raw inputs from structured knowledge:
@@ -53,7 +55,7 @@ The **concepts/** directory contains four maintained files that form the core of
 The LLM Wiki pattern operates through three fundamental processes:
 
 1. **Ingest** - Process new sources into the wiki structure
-   - LLM analyzes raw documents
+   - LLM analyzes raw documents (typically 10-15 pages per source)
    - Creates or updates related wiki articles
    - Maintains links between concepts
 
@@ -67,6 +69,8 @@ The LLM Wiki pattern operates through three fundamental processes:
    - Detect contradictions between articles
    - Identify stale or outdated content
    - Find orphaned pages (articles with no links)
+
+> **File-Back Principle**: Query answers must be saved to the wiki rather than lost in chat history. This allows explorations to compound just like ingested sources, enabling the knowledge base to grow organically from questions asked.
 
 ### Core Update Principle
 
@@ -90,6 +94,7 @@ This makes the system portable, Git-trackable, and usable in Obsidian or Cursor 
 - **Reading Companion Wikis** - Notes and summaries from books or articles
 - **Business/Team Wikis** - Aggregating information from Slack, meetings, and documents
 - **Farzapedia-Style** - Transforming personal digital traces (messages, notes, entries) into structured knowledge
+- **Memex-Style** - Following Vannevar Bush's vision of personal knowledge management with associative trails
 
 ### Farzapedia Case Study
 
@@ -122,6 +127,12 @@ For processing large documents like PDFs:
 3. Summarize the summaries recursively
 4. Preserves document structure and hierarchy
 
+This approach enables the LLM to synthesize understanding across entire documents while maintaining context.
+
+### Historical Context
+
+The LLM Wiki pattern draws inspiration from Vannevar Bush's Memex concept—a visionary device for storing and retrieving human knowledge through associative trails. Like the Memex, the wiki approach treats knowledge as interconnected rather than isolated. Git provides the version control backbone, enabling the wiki to evolve as a collaborative, trackable knowledge project where LLMs handle the tedious cross-referencing bookkeeping that humans avoid.
+
 ### Obsidian Integration
 
 Obsidian serves as the primary interface for editing and navigating markdown files, with full support for:
@@ -129,6 +140,8 @@ Obsidian serves as the primary interface for editing and navigating markdown fil
 - **Wiki links** (`[[page name]]`) for internal navigation
 - **Graph view** for visualizing knowledge connections
 - **Unix-style file interoperability** for portability
+
+The practical setup uses Obsidian as the IDE with the LLM acting as a programmer managing the wiki like a codebase—creating, updating, and linking files while maintaining structural integrity.
 
 ### Key Distinction: RAG vs. LLM Wiki
 
@@ -139,6 +152,7 @@ Obsidian serves as the primary interface for editing and navigating markdown fil
 | **Query Efficiency** | Must retrieve and assemble context each time | Directly references existing compiled knowledge |
 | **Update Model** | Vector store updates replace old embeddings | Incremental merges preserve historical context |
 | **Gap Detection** | Cannot identify knowledge gaps | Actively detects and records gaps for future filling |
+| **Answer Persistence** | Answers vanish into chat history | Answers can be filed back as new wiki pages |
 
 ---
 
@@ -152,3 +166,5 @@ Obsidian serves as the primary interface for editing and navigating markdown fil
 - AGENTS.md - Agent behavior definition convention
 - VaultMind - Browser-based wiki implementation
 - LOTR Memory Explorer - Large-scale memory visualization example
+- Vannevar Bush - Memex concept and associative memory
+- Git - Version control for knowledge evolution

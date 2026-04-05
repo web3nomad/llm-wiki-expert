@@ -10,7 +10,7 @@ References to sources of knowledge.
 
 Andrej Karpathy describes using LLMs to build personal wiki-style knowledge bases instead of traditional RAG (Retrieval-Augmented Generation) systems. This approach emphasizes local data storage, simple markdown files, and incremental knowledge updates across sources and concepts directories, allowing the wiki to grow organically and compound knowledge over time.
 
-The LLM Wiki pattern is a methodology for building persistent, compounding knowledge bases using LLMs, where instead of traditional RAG that rediscovers knowledge from scratch on every query, the LLM incrementally builds and maintains a structured wiki between the user and raw source documents.
+The LLM Wiki pattern is a methodology for building persistent, compounding knowledge bases using LLMs, where instead of traditional RAG that rediscovers knowledge from scratch on every query, the LLM incrementally builds and maintains a structured wiki between the user and raw source documents. The key innovation is that unlike RAG which has "no accumulation" — forcing the LLM to find and piece together fragments on every query — the LLM Wiki instead compiles knowledge once and keeps it current, allowing the system to persist and compound knowledge between sessions.
 
 ## Key Principles
 
@@ -34,9 +34,16 @@ The LLM incrementally updates concepts without overwriting existing knowledge, a
 
 The LLM Wiki methodology employs a three-layer architecture:
 
-1. **Schema Layer** - Configuration files (e.g., CLAUDE.md, AGENTS.md) that define the wiki's structure, conventions, and behavioral guidelines
+1. **Schema Layer** - Configuration files (e.g., CLAUDE.md, AGENTS.md) that define the wiki's structure, conventions, and behavioral guidelines. The schema file is the key configuration that transforms an LLM into a disciplined wiki maintainer through co-evolution — the schema and the LLM's behavior evolve together to create a well-structured knowledge base.
 2. **Wiki Layer** - Markdown files containing the structured, interconnected knowledge articles
 3. **Raw Sources** - Immutable source documents that serve as the foundation of knowledge
+
+### Additional Navigation and Logging Files
+
+Beyond the core directories, two additional files support wiki operations:
+
+- **Index.md** - Serves as the central navigation hub for content, providing an entry point and structured overview of the wiki's contents
+- **Log.md** - Maintains chronological, append-only records of wiki activity, changes, and updates over time
 
 ### Four Concept Files
 
@@ -57,15 +64,19 @@ The query operation follows a sophisticated workflow:
 4. Records identified gaps as tasks for future filling
 5. Files answers back into the wiki as new pages when valuable
 
-This approach allows explorations to compound just like ingested sources.
+This approach allows explorations to compound just like ingested sources. The "file-back" mechanism is critical — answers must be saved to the wiki rather than lost in chat history, transforming ephemeral conversations into persistent, compoundable knowledge.
 
 ### Three Core Operations
 
 The LLM Wiki pattern supports three fundamental operations:
 
-1. **Ingest** - Process new sources into the wiki, transforming raw data into structured knowledge articles
-2. **Query** - Answer questions against the wiki, retrieving and synthesizing information from existing articles
+1. **Ingest** - Process new sources into the wiki, transforming raw data into structured knowledge articles (typically 10-15 processed pages per source)
+2. **Query** - Answer questions against the wiki, retrieving and synthesizing information from existing articles, with support for multiple output formats
 3. **Lint** - Health-check the wiki for contradictions, stale content, orphaned pages, and consistency issues
+
+### LLM as Knowledge Curator
+
+One of the powerful aspects of the LLM Wiki pattern is that LLMs handle the tedious bookkeeping that humans typically avoid — including cross-referencing across many files, maintaining consistency, and identifying knowledge gaps. This transforms the LLM from a simple Q&A tool into an active knowledge manager that continuously maintains and improves the wiki structure.
 
 ## Document Processing: Recursive Summarization
 
@@ -76,11 +87,15 @@ A key technique for processing long-form documents is the **recursive summarizat
 3. Summarizes the page summaries into higher-level summaries
 4. Preserves document structure while creating a hierarchical knowledge tree
 
-This approach enables efficient ingestion of lengthy documents while maintaining structural context and enabling quick navigation to relevant sections.
+This approach enables efficient ingestion of lengthy documents while maintaining structural context and enabling quick navigation to relevant sections. The recursive approach allows the LLM to preserve the document's hierarchical structure while extracting the most important concepts at each level of abstraction.
 
 ## The Idea File Concept
 
 Sharing markdown files instead of code or applications is more valuable in the LLM agent era. The wiki itself becomes a portable, shareable knowledge artifact that can be used by LLMs or tools like Obsidian and Cursor. All knowledge is stored as plain markdown, making it portable, Git-trackable, and universally accessible.
+
+## Historical Context: Vannevar Bush and the Memex
+
+The LLM Wiki pattern draws inspiration from Vannevar Bush's visionary concept of the **Memex** — a hypothetical mechanical device that would allow users to store and retrieve information associatively, much like the human mind works. Bush described this in his seminal 1945 essay "As We May Think," envisioning a system where an individual could store all their books, records, and communications, with the ability to quickly retrieve them through associative links. The LLM Wiki approach can be seen as a modern, AI-powered realization of this decades-old vision, leveraging LLMs to automate the creation and maintenance of these associative links.
 
 ## Related Entities
 
@@ -91,11 +106,15 @@ Sharing markdown files instead of code or applications is more valuable in the L
 - Obsidian - Recommended IDE for managing the wiki like a codebase
 - CLAUDE.md - Schema configuration file for defining wiki structure
 - AGENTS.md - Schema configuration file for agent behavior conventions
+- Index.md - Central navigation file for wiki content
+- Log.md - Chronological append-only record of wiki activity
 - LLM Wiki - The methodology itself
 - RAG (Retrieval-Augmented Generation) - Traditional approach being replaced
 - OpenAI - Provider of compatible API for BYOAI implementation
 - VaultMind - Browser-based implementation of the wiki pattern with zero backend (single HTML file), supporting PDF drops, URLs, voice memos, and file drag with live knowledge graph visualization
 - LOTR Memory Explorer - Demonstrated explicit memory at scale by converting 480,000 words into 20,000 navigable memories with visual graph
+- Vannevar Bush - Visionary who conceptualized the Memex, an early influence on personal knowledge management
+- Memex - Hypothetical associative memory system described by Vannevar Bush in 1945
 
 ---
 
@@ -147,6 +166,7 @@ This example proves the viability of the approach for large-scale knowledge base
 | Re-derives knowledge per-query | Persists and compounds knowledge between sessions |
 | No accumulation | Compounding knowledge base |
 | No persistent memory between queries | Knowledge gaps detected and recorded for future filling |
+| Fragmented knowledge each query | Integrated, cross-referenced knowledge |
 
 ---
 
@@ -192,3 +212,9 @@ This integration enables powerful knowledge visualization and navigation while m
 - [[Recursive Summarization]]
 - [[Knowledge Graph Visualization]]
 - [[Zero-Backend Applications]]
+- [[Vannevar Bush]]
+- [[Memex]]
+- [[Co-Evolution of Schema and LLM]]
+- [[File-Back Mechanism]]
+- [[Index.md]]
+- [[Log.md]]
