@@ -6,7 +6,7 @@ This expert's knowledge definitions.
 
 ## atypica.ai
 
-**Description:** atypica.ai is an AI research platform that simulates consumer behavior using AI-powered synthetic consumers to help brands understand how different segments react to products, messaging, and pricing.
+**Description:** atypica.ai is an AI research platform that simulates consumer behavior using AI-powered synthetic consumers to help brands understand how different segments react to products, messaging, and pricing. Founded in 2024, the company uses large language models to simulate consumer behavior at scale, aiming to replace traditional market research methods with AI-native alternatives that are faster, cheaper, and more accurate.
 
 **Key Capabilities:**
 - AI research agent that simulates consumer behavior through synthetic consumers
@@ -18,6 +18,7 @@ This expert's knowledge definitions.
 - Generates qualitative and quantitative insights for brands and market researchers
 - Compresses market research from weeks to minutes while maintaining quality
 - Offers research at a fraction of traditional research costs
+- Built on large language models simulating consumer behavior at scale
 
 **Design Philosophy:**
 - **"The Less AI, the More AI"** - The less the brand looks like AI, the more powerfully AI it is
@@ -33,14 +34,19 @@ This expert's knowledge definitions.
 - **Core Insight:** Since the product simulates human consumers, the brand itself must feel deeply human
 
 **Team & Growth:**
-- Built by a team including XD (web3nomad), a serial entrepreneur and CTO
+- Founded in 2024
+- Built by a team including XD (web3nomad), a serial entrepreneur and CTO/co-founder
+- XD (web3nomad) previously served as CTO at Tezign before founding atypica.ai
+- Team consists of engineers and designers
+- Has raised seed funding
 - Has reached over 100,000 users
 
 **Website:** https://atypica.ai
 
 **Related Entities:**
-- XD (web3nomad) - Founder/CTO
+- XD (web3nomad) - Founder/CTO/Co-founder
 - Tezign
+- Real Person Agents
 
 ---
 
@@ -61,6 +67,7 @@ This expert's knowledge definitions.
 
 **Related Entities:**
 - atypica.ai
+- XD (web3nomad)
 
 ---
 
@@ -106,7 +113,7 @@ Professional But Not Distant — sophisticated, consultancy-level precision comb
 
 ## Real Person Agents
 
-**Description:** The synthetic consumer agents used by atypica.ai to simulate human behavior for market research. These AI agents maintain consistent cognitive patterns, emotional responses, and decision-making frameworks.
+**Description:** The synthetic consumer agents used by atypica.ai to simulate human behavior for market research. These AI agents are built on large language models and maintain consistent cognitive patterns, emotional responses, and decision-making frameworks.
 
 **Key Characteristics:**
 - Achieve 85% human-like accuracy in simulating consumer behavior
@@ -114,6 +121,7 @@ Professional But Not Distant — sophisticated, consultancy-level precision comb
 - Have distinct emotional responses and decision-making frameworks
 - Can be automatically built into consumer personas
 - Capable of conducting interviews and analyzing behavioral patterns
+- Built on large language models simulating consumer behavior at scale
 
 **Related Entities:**
 - atypica.ai
@@ -122,10 +130,13 @@ Professional But Not Distant — sophisticated, consultancy-level precision comb
 
 ## Tezign
 
-**Description:** A design and technology company related to atypica.ai, involved in the development of AI-powered research tools.
+**Description:** A design and technology company related to atypica.ai. XD (web3nomad), the founder and CTO of atypica.ai, previously served as CTO at Tezign before founding atypica.ai in 2024. Tezign is involved in the development of AI-powered research tools.
 
 **Related Entities:**
 - atypica.ai
+- XD (web3nomad)
+
+---
 
 ## atypica.ai is an AI research agent that simulates ...
 
@@ -142,4 +153,41 @@ Key capabilities:
 
 Design philosophy (The Less AI, the More AI): The product simulates humans, so the brand itself must feel deeply human. The less it looks like AI, the more powerfully AI it is. Avoids: neon gradients, drop shadows, stock photo composites, 3D rendered objects.
 
-Growth: 100K+ users. Built by XD (web3nomad, CTO of Tezign) and team.
+Growth: Founded in 2024, raised seed funding, 100K+ users. Built by XD (web3nomad, CTO of Tezign) and team.
+
+---
+
+## XD (web3nomad)
+
+**Description:** A serial entrepreneur, CTO, and co-founder of atypica.ai. Previously served as CTO at Tezign before founding atypica.ai in 2024. Leads the development of AI-powered consumer research tools and is the author of atypica.ai's "The Less AI, the More AI" design philosophy.
+
+**Key Points:**
+- Serial entrepreneur and CTO
+- Co-founder of atypica.ai (founded 2024)
+- Previously served as CTO at Tezign
+- Author of the "The Less AI, the More AI" design philosophy
+- Leads engineering and design team
+
+**Related Entities:**
+- atypica.ai
+- Tezign
+
+---
+
+## atypica.ai Funding & Growth
+
+**Description:** Summary of atypica.ai's funding status and growth metrics.
+
+**Key Points:**
+- Founded in 2024
+- Has raised seed funding
+- Growing toward 100,000+ users
+- Team consists of engineers and designers
+
+**Related Entities:**
+- atypica.ai
+- XD (web3nomad)
+
+## atypica.ai was founded in 2024. The team includes ...
+
+atypica.ai was founded in 2024. The team includes XD (web3nomad, CTO and co-founder, previously CTO at Tezign), along with a small team of engineers and designers. The product is built on large language models that simulate consumer behavior at scale. atypica has raised seed funding and is growing to 100K+ users. The company is focused on replacing traditional market research methods with AI-native alternatives that are faster, cheaper, and more accurate.

@@ -7,9 +7,9 @@ Comparisons and contrasts between concepts.
 ## atypica.ai vs. Traditional Market Research
 
 ### Overview
-atypica.ai is an AI research platform that simulates consumer behavior using AI-powered synthetic consumers to help brands understand how different segments react to products, messaging, and pricing. It serves as an alternative to traditional market research methods. The platform was built by a team including XD (web3nomad), a serial entrepreneur and CTO, and has reached over 100,000 users.
+atypica.ai is an AI research platform that simulates consumer behavior using AI-powered synthetic consumers to help brands understand how different segments react to products, messaging, and pricing. It serves as an alternative to traditional market research methods. Founded in 2024, the platform was built by a team including XD (web3nomad), a serial entrepreneur and CTO who previously served as CTO at Tezign. The platform has raised seed funding and is growing toward 100,000+ users.
 
-The platform uses **Real Person Agents**—synthetic consumers that maintain consistent cognitive patterns, emotional responses, and decision-making frameworks with **85% human-like accuracy**. These agents automatically build consumer personas, conduct interviews, and analyze behavioral patterns to reveal emotional and cognitive factors behind human choices.
+The platform uses **Real Person Agents**—synthetic consumers that maintain consistent cognitive patterns, emotional responses, and decision-making frameworks with **85% human-like accuracy**. These agents automatically build consumer personas, conduct interviews, and analyze behavioral patterns to reveal emotional and cognitive factors behind human choices. The product is built on large language models simulating consumer behavior at scale.
 
 ### Comparison Matrix
 
@@ -23,9 +23,11 @@ The platform uses **Real Person Agents**—synthetic consumers that maintain con
 | **Insight Type** | Both qualitative and quantitative | Both (but resource-intensive) |
 | **Use Case** | Testing product concepts before launch | Full-cycle market research studies |
 | **User Base** | 100,000+ users | N/A (varies by firm) |
+| **Technology** | Large language models | N/A |
+| **Founded** | 2024 | N/A |
 
 ### Key Trade-offs
-- **Advantages of atypica.ai**: Faster iteration, lower costs, ability to test multiple scenarios simultaneously, scalable simulation, accessible to over 100,000 users, compresses market research from weeks to minutes
+- **Advantages of atypica.ai**: Faster iteration, lower costs, ability to test multiple scenarios simultaneously, scalable simulation, accessible to over 100,000 users, compresses market research from weeks to minutes, built on large language models
 - **Advantages of Traditional Methods**: Human nuance, real-world behavioral data, established methodological credibility
 
 ---
@@ -72,4 +74,4 @@ All visual content is evaluated against five criteria:
 
 ---
 
-*Note: Updated to include Real Person Agents information and 85% accuracy metric. Visual language styles refined to use "Architectural" (consistent with source material) for strategic analysis content. Added compression timeline detail (weeks to minutes).*
+*Note: Updated to include Real Person Agents information and 85% accuracy metric. Added founding year (2024), XD's prior role at Tezign, seed funding status, and large language models technology detail. Visual language styles refined to use "Architectural" (consistent with source material) for strategic analysis content. Added compression timeline detail (weeks to minutes).*

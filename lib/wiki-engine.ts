@@ -343,7 +343,9 @@ async function getAllExtracts(expertId: string): Promise<string[]> {
     if (folder.isDirectory()) {
       const extractPath = path.join(sourcesDir, folder.name, 'extract.md');
       if (fs.existsSync(extractPath)) {
-        extracts.push(fs.readFileSync(extractPath, 'utf-8'));
+        // Prefix each extract with its source ID for attribution
+        const content = fs.readFileSync(extractPath, 'utf-8');
+        extracts.push(`<!-- source-id: ${folder.name} -->\n${content}`);
       }
     }
   }
@@ -373,7 +375,8 @@ export async function updateConcepts(expertId: string): Promise<void> {
       prompt: `Update the definitions file. Include:
 - Core definitions from the extracts
 - Updated terminology and explanations
-- Main concepts and their meanings`,
+- Main concepts and their meanings
+- For each concept or definition, add a source attribution line at the end: *Source: [source-id]* using the source-id from the <!-- source-id: ... --> comment in each extract`,
     },
     {
       key: 'entities',
@@ -385,10 +388,11 @@ export async function updateConcepts(expertId: string): Promise<void> {
     },
     {
       key: 'sources',
-      prompt: `Create source references from the extracts:
-- Key information sources
-- Important facts from each source
-- Source relationships and dependencies`,
+      prompt: `Create a source index from the extracts. For each source (identified by <!-- source-id: ... -->):
+- List the source ID
+- One-line summary of what this source contains
+- Key facts or concepts contributed by this source
+Format: ## [source-id]\n*Summary:* ...\n*Key contributions:* ...`,
     },
     {
       key: 'comparisons',
@@ -404,7 +408,8 @@ export async function updateConcepts(expertId: string): Promise<void> {
     const updatedContent = await updateConceptsWithLLM(
       existingContent,
       allExtracts,
-      concept.key
+      concept.key,
+      concept.prompt
     );
     await updateWikiContent(expertId, concept.key, updatedContent);
   }

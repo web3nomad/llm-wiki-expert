@@ -107,7 +107,8 @@ Respond in the following JSON format (no additional text):
 export async function updateConceptsWithLLM(
   existingContent: string,
   newExtracts: string[],
-  conceptType: 'definitions' | 'entities' | 'sources' | 'comparisons'
+  conceptType: 'definitions' | 'entities' | 'sources' | 'comparisons',
+  extraInstructions?: string
 ): Promise<string> {
   const prompt = `You are maintaining a knowledge wiki. Incrementally update the existing concept file by merging new information.
 
@@ -123,6 +124,7 @@ TASK:
 3. Add new entries from the extracts
 4. Keep the format consistent with the existing content
 5. Do NOT replace existing content - only enhance and update it
+${extraInstructions ? `6. ${extraInstructions}` : ''}
 
 Respond with the complete updated content in markdown format.`;
 

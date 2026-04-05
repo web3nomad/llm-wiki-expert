@@ -8,11 +8,16 @@
 - [atypica.ai uses AI to simulate consumers, compress...](concepts/definitions.md#atypicaai-uses-ai-to-simulate-consumers-compress)
 - [Real Person Agents](concepts/definitions.md#real-person-agents)
 - [Tezign](concepts/definitions.md#tezign)
+- [atypica.ai is an AI research agent that simulates ...](concepts/definitions.md#atypicaai-is-an-ai-research-agent-that-simulates-)
+- [XD (web3nomad)](concepts/definitions.md#xd-web3nomad)
+- [atypica.ai Funding & Growth](concepts/definitions.md#atypicaai-funding--growth)
 
 ## Entities
 - [Companies & Organizations](concepts/entities.md#companies--organizations)
 - [Summary of Extract Analysis](concepts/entities.md#summary-of-extract-analysis)
 - [People](concepts/entities.md#people)
+- [Visual Language Styles](concepts/entities.md#visual-language-styles)
+- [Key Concepts](concepts/entities.md#key-concepts)
 
 ## Sources
 - [Source Accessibility Notes](concepts/sources.md#source-accessibility-notes)
