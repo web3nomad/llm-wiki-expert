@@ -10,6 +10,49 @@ import {
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 
+/**
+ * Rebuild index.md — a navigable catalog of all wiki content.
+ * Called after every ingest. LLM reads this first on every query.
+ */
+export async function rebuildIndex(expertId: string): Promise<void> {
+  const wiki = await getWikiContent(expertId);
+  const expert = await getExpert(expertId);
+  if (!expert) return;
+
+  const date = new Date().toISOString().slice(0, 10);
+
+  // Extract headings from each concept file
+  const extractHeadings = (content: string, file: string) => {
+    const lines = content.split('\n').filter(l => /^#{2,3}\s/.test(l));
+    return lines.map(l => {
+      const label = l.replace(/^#+\s*/, '').trim();
+      const slug = label.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      return `- [${label}](concepts/${file}.md#${slug})`;
+    }).join('\n');
+  };
+
+  const index = `# Wiki Index — ${expert.name}
+*Last updated: ${date}*
+
+## Definitions
+${extractHeadings(wiki.definitions, 'definitions') || '*(empty)*'}
+
+## Entities
+${extractHeadings(wiki.entities, 'entities') || '*(empty)*'}
+
+## Sources
+${extractHeadings(wiki.sources, 'sources') || '*(empty)*'}
+
+## Comparisons
+${extractHeadings(wiki.comparisons, 'comparisons') || '*(empty)*'}
+
+## Knowledge Gaps
+${wiki.gaps.split('\n').filter(l => /^##\s/.test(l)).map(l => `- ${l.replace(/^##\s*/, '')}`).join('\n') || '*(none detected)*'}
+`;
+
+  fs.writeFileSync(path.join(DATA_DIR, expertId, 'index.md'), index);
+}
+
 export interface Expert {
   id: string;
   name: string;
@@ -275,6 +318,9 @@ ${extract.entities.map((e) => `- ${e}`).join('\n')}
 
   // Update concepts with the new extract
   await updateConcepts(expertId);
+
+  // Rebuild index after every ingest
+  await rebuildIndex(expertId);
 
   // Log the ingest
   const preview = content.slice(0, 60).replace(/\n/g, ' ');
