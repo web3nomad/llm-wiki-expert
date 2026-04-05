@@ -58,3 +58,15 @@ LLM Wiki and RAG represent fundamentally different approaches to building AI-pow
 The practical impact: A single source might touch 10-15 wiki pages during ingestion, updating summaries, entity pages, and cross-references. Over time, your wiki becomes a compounding asset where every query builds on previous work. When you ask the LLM to synthesize information, that answer can itself be filed back into the wiki as a new page—allowing explorations to compound just like ingested sources.
 
 Real-world proof points: FarzaTV transformed 2,500 diary entries, Apple Notes, and iMessages into 400 interconnected articles. The LOTR Memory Explorer converted 480,000 words into 20,000 navigable memories with a visual graph.
+
+## User (4/6/2026, 12:16:20 AM)
+
+What is the key difference between LLM Wiki and RAG?
+
+## Assistant (4/6/2026, 12:16:20 AM)
+
+The key difference between LLM Wiki and traditional RAG (Retrieval-Augmented Generation) is persistence and accumulation. With RAG, the LLM must rediscover and piece together relevant knowledge fragments from scratch on every query—there is no accumulation between sessions. Subtle questions requiring synthesis across multiple documents are difficult because nothing is built up over time.
+
+With LLM Wiki, the LLM incrementally builds and maintains a structured wiki between the user and raw source documents. Knowledge is compiled once and kept current through continuous updates. Cross-references already exist in the wiki, contradictions are flagged and tracked, and the system compounds knowledge between sessions rather than starting fresh each time.
+
+In essence: RAG re-derives knowledge on every query, while LLM Wiki persists and compounds knowledge.

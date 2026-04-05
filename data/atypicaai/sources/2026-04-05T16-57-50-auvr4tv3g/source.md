@@ -1,0 +1,1 @@
+https://blog.atypica.ai

@@ -1,0 +1,1 @@
+https://blog.web3nomad.com/p/the-less-ai-the-more-ai-atypica-design-philosophy
