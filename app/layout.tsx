@@ -3,8 +3,8 @@ import './globals.css';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'LLM Wiki Expert System',
-  description: 'Create and chat with AI experts backed by wiki knowledge bases',
+  title: 'LLM Wiki Expert',
+  description: 'Personal knowledge bases powered by LLMs',
 };
 
 export default function RootLayout({
@@ -16,28 +16,38 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className="min-h-screen">
-          <header className="border-b border-[var(--border)]">
-            <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-              <Link href="/" className="text-xl font-bold text-[var(--foreground)] hover:text-[var(--primary)] transition-colors">
-                🧠 Wiki Expert
+          <header style={{ borderBottom: '1px solid rgba(240,239,232,0.08)' }}>
+            <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+              <Link href="/" style={{ textDecoration: 'none' }}>
+                <span style={{
+                  fontSize: '0.8125rem',
+                  fontWeight: 500,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: 'var(--foreground)',
+                  opacity: 0.9,
+                }}>
+                  LLM Wiki Expert
+                </span>
               </Link>
-              <nav className="flex items-center gap-4">
-                <Link 
-                  href="/" 
-                  className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors"
+              <nav className="flex items-center gap-6">
+                <Link
+                  href="/"
+                  style={{
+                    fontSize: '0.8125rem',
+                    color: 'var(--muted-foreground)',
+                    textDecoration: 'none',
+                  }}
                 >
                   Experts
                 </Link>
-                <Link 
-                  href="/create" 
-                  className="btn btn-primary text-sm"
-                >
-                  Create Expert
+                <Link href="/create" className="btn btn-primary btn-sm">
+                  New Expert
                 </Link>
               </nav>
             </div>
           </header>
-          <main className="max-w-6xl mx-auto px-4 py-8">
+          <main className="max-w-5xl mx-auto px-6 py-10">
             {children}
           </main>
         </div>

@@ -6,78 +6,174 @@ export default async function HomePage() {
 
   return (
     <div className="animate-fade-in">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4">AI Experts with Wiki Knowledge</h1>
-        <p className="text-[var(--muted-foreground)] text-lg max-w-2xl mx-auto">
-          Create AI experts backed by dynamic wiki knowledge bases. 
-          Chat with them, watch them learn, and help fill their knowledge gaps.
+
+      {/* Hero */}
+      <div style={{ marginBottom: '4rem' }}>
+        <p style={{
+          fontSize: '0.75rem',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+          color: 'var(--primary)',
+          marginBottom: '1.25rem',
+          fontWeight: 500,
+        }}>
+          Personal Knowledge System
+        </p>
+        <h1 style={{
+          fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
+          fontWeight: 300,
+          letterSpacing: '-0.03em',
+          lineHeight: 1.15,
+          color: 'var(--foreground)',
+          marginBottom: '1rem',
+          maxWidth: '36rem',
+        }}>
+          Knowledge that compounds,<br />not retrieval that repeats.
+        </h1>
+        <p style={{
+          fontSize: '0.9375rem',
+          color: 'var(--muted-foreground)',
+          maxWidth: '32rem',
+          lineHeight: 1.7,
+        }}>
+          Create an expert, ingest sources, chat with a wiki that grows over time.
+          Not RAG — a persistent, compounding knowledge base.
         </p>
       </div>
 
       {experts.length === 0 ? (
-        <div className="text-center py-16">
-          <div className="text-6xl mb-4">🤖</div>
-          <h2 className="text-2xl font-semibold mb-2">No experts yet</h2>
-          <p className="text-[var(--muted-foreground)] mb-6">
-            Create your first AI expert to get started
+        <div style={{ paddingTop: '2rem' }}>
+          <p style={{ color: 'var(--muted-foreground)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
+            No experts yet. Create your first one.
           </p>
           <Link href="/create" className="btn btn-primary">
             Create Expert
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {experts.map((expert) => (
-            <Link 
-              key={expert.id} 
-              href={`/expert/${expert.id}`}
-              className="card hover:border-[var(--primary)] transition-colors group"
-            >
-              <div className="flex items-start gap-4">
-                <div className="w-16 h-16 rounded-full bg-[var(--primary)] flex items-center justify-center text-2xl font-bold text-white flex-shrink-0">
-                  {expert.name.charAt(0).toUpperCase()}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-semibold group-hover:text-[var(--primary)] transition-colors truncate">
+        <>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+            gap: '1px',
+            border: '1px solid rgba(240,239,232,0.08)',
+            borderRadius: '4px',
+            overflow: 'hidden',
+            marginBottom: '3rem',
+          }}>
+            {experts.map((expert) => (
+              <Link
+                key={expert.id}
+                href={`/expert/${expert.id}`}
+                style={{ textDecoration: 'none' }}
+              >
+                <div style={{
+                  background: 'var(--card)',
+                  padding: '1.5rem',
+                  borderRight: '1px solid rgba(240,239,232,0.08)',
+                  borderBottom: '1px solid rgba(240,239,232,0.08)',
+                  transition: 'background 0.15s',
+                  cursor: 'pointer',
+                  minHeight: '120px',
+                }}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#1a1a17')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'var(--card)')}
+                >
+                  <div style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '3px',
+                    background: 'rgba(232,160,74,0.15)',
+                    color: 'var(--primary)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.8125rem',
+                    fontWeight: 600,
+                    marginBottom: '0.875rem',
+                    letterSpacing: '0.02em',
+                  }}>
+                    {expert.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div style={{
+                    fontSize: '0.9375rem',
+                    fontWeight: 400,
+                    color: 'var(--foreground)',
+                    marginBottom: '0.375rem',
+                    letterSpacing: '-0.01em',
+                  }}>
                     {expert.name}
-                  </h3>
-                  <p className="text-sm text-[var(--muted-foreground)] line-clamp-2 mt-1">
+                  </div>
+                  <div style={{
+                    fontSize: '0.8125rem',
+                    color: 'var(--muted-foreground)',
+                    lineHeight: 1.5,
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical' as const,
+                    overflow: 'hidden',
+                  }}>
                     {expert.bio}
-                  </p>
-                  <div className="flex items-center gap-2 mt-3">
-                    <span className="badge badge-primary">Chat</span>
-                    <span className="badge badge-warning">Wiki</span>
                   </div>
                 </div>
+              </Link>
+            ))}
+            <Link href="/create" style={{ textDecoration: 'none' }}>
+              <div style={{
+                background: 'transparent',
+                padding: '1.5rem',
+                cursor: 'pointer',
+                minHeight: '120px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                color: 'var(--muted-foreground)',
+                fontSize: '0.8125rem',
+                transition: 'color 0.15s',
+                borderRight: '1px solid rgba(240,239,232,0.08)',
+                borderBottom: '1px solid rgba(240,239,232,0.08)',
+              }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--primary)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted-foreground)')}
+              >
+                <span style={{ fontSize: '1rem' }}>+</span>
+                <span>New Expert</span>
               </div>
             </Link>
-          ))}
-        </div>
+          </div>
+        </>
       )}
 
-      <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="card text-center">
-          <div className="text-3xl mb-3">📚</div>
-          <h3 className="font-semibold mb-2">Wiki Knowledge Base</h3>
-          <p className="text-sm text-[var(--muted-foreground)]">
-            Each expert has a markdown-based knowledge base that grows over time
-          </p>
-        </div>
-        <div className="card text-center">
-          <div className="text-3xl mb-3">💬</div>
-          <h3 className="font-semibold mb-2">Interactive Chat</h3>
-          <p className="text-sm text-[var(--muted-foreground)]">
-            Chat with experts and watch them learn from your conversations
-          </p>
-        </div>
-        <div className="card text-center">
-          <div className="text-3xl mb-3">🔍</div>
-          <h3 className="font-semibold mb-2">Gap Detection</h3>
-          <p className="text-sm text-[var(--muted-foreground)]">
-            System identifies knowledge gaps and can auto-fill them
-          </p>
-        </div>
+      {/* Footer note */}
+      <div style={{
+        borderTop: '1px solid rgba(240,239,232,0.06)',
+        paddingTop: '2rem',
+        display: 'flex',
+        gap: '2rem',
+      }}>
+        {[
+          { label: 'Explicit', desc: 'See exactly what the AI knows' },
+          { label: 'Yours', desc: 'Plain markdown files, local' },
+          { label: 'BYOAI', desc: 'Any OpenAI-compatible API' },
+        ].map(item => (
+          <div key={item.label}>
+            <div style={{
+              fontSize: '0.6875rem',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              color: 'var(--primary)',
+              fontWeight: 500,
+              marginBottom: '0.25rem',
+            }}>
+              {item.label}
+            </div>
+            <div style={{ fontSize: '0.8125rem', color: 'var(--muted-foreground)' }}>
+              {item.desc}
+            </div>
+          </div>
+        ))}
       </div>
+
     </div>
   );
 }

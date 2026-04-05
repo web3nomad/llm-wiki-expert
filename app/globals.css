@@ -1,54 +1,71 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --card: #171717;
-  --card-foreground: #ededed;
-  --popover: #171717;
-  --popover-foreground: #ededed;
-  --primary: #3b82f6;
-  --primary-foreground: #ffffff;
-  --secondary: #262626;
-  --secondary-foreground: #ededed;
-  --muted: #262626;
-  --muted-foreground: #a1a1a1;
-  --accent: #262626;
-  --accent-foreground: #ededed;
-  --destructive: #ef4444;
-  --destructive-foreground: #fafafa;
-  --border: #262626;
-  --input: #262626;
-  --ring: #3b82f6;
+  --background: #0f0f0d;
+  --foreground: #f0efe8;
+  --card: #161614;
+  --card-foreground: #f0efe8;
+  --primary: #e8a04a;
+  --primary-foreground: #0f0f0d;
+  --secondary: #1e1e1b;
+  --secondary-foreground: #f0efe8;
+  --muted: #1e1e1b;
+  --muted-foreground: #8a8880;
+  --accent: #e8a04a;
+  --border: rgba(240, 239, 232, 0.08);
+  --border-strong: rgba(240, 239, 232, 0.15);
+  --input: #1a1a17;
+  --ring: #e8a04a;
+  --destructive: #e05a4a;
 }
 
 * {
   border-color: var(--border);
+  box-sizing: border-box;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
+/* Typography */
+h1, h2, h3, h4 {
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+/* Card — no shadow, no glow, hairline border */
 .card {
   background-color: var(--card);
-  border-radius: 0.75rem;
+  border-radius: 4px;
   border: 1px solid var(--border);
   padding: 1.5rem;
 }
 
+/* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.5rem;
-  padding: 0.625rem 1.25rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: all 0.2s;
+  border-radius: 3px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  transition: background-color 0.15s, opacity 0.15s;
   cursor: pointer;
+  border: none;
+}
+
+.btn-sm {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.75rem;
 }
 
 .btn-primary {
@@ -56,111 +73,151 @@ body {
   color: var(--primary-foreground);
 }
 
-.btn-primary:hover {
-  background-color: #2563eb;
+.btn-primary:hover:not(:disabled) {
+  background-color: #d49040;
+}
+
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .btn-secondary {
   background-color: var(--secondary);
-  color: var(--secondary-foreground);
+  color: var(--foreground);
+  border: 1px solid var(--border);
 }
 
-.btn-secondary:hover {
-  background-color: #333333;
+.btn-secondary:hover:not(:disabled) {
+  background-color: #252520;
+  border-color: var(--border-strong);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .btn-ghost {
   background-color: transparent;
-  color: var(--foreground);
+  color: var(--muted-foreground);
 }
 
 .btn-ghost:hover {
-  background-color: var(--accent);
+  color: var(--foreground);
 }
 
+/* Input / Textarea */
 .input {
   background-color: var(--input);
   border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  padding: 0.625rem 1rem;
+  border-radius: 3px;
+  padding: 0.5rem 0.75rem;
   color: var(--foreground);
   width: 100%;
+  font-size: 0.875rem;
+  transition: border-color 0.15s;
+  outline: none;
 }
 
 .input:focus {
-  outline: none;
-  ring: 2px;
-  ring-color: var(--ring);
+  border-color: var(--ring);
+}
+
+.input::placeholder {
+  color: var(--muted-foreground);
 }
 
 .textarea {
   background-color: var(--input);
   border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  padding: 0.625rem 1rem;
+  border-radius: 3px;
+  padding: 0.5rem 0.75rem;
   color: var(--foreground);
   width: 100%;
   min-height: 120px;
   resize: vertical;
+  font-size: 0.875rem;
+  font-family: inherit;
+  line-height: 1.6;
+  transition: border-color 0.15s;
+  outline: none;
 }
 
 .textarea:focus {
-  outline: none;
-  ring: 2px;
-  ring-color: var(--ring);
+  border-color: var(--ring);
 }
 
-.label {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  color: var(--foreground);
+.textarea::placeholder {
+  color: var(--muted-foreground);
 }
 
+/* Badge */
 .badge {
   display: inline-flex;
   align-items: center;
-  border-radius: 9999px;
-  padding: 0.125rem 0.625rem;
-  font-size: 0.75rem;
+  border-radius: 2px;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
   font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .badge-primary {
-  background-color: rgba(59, 130, 246, 0.2);
-  color: #60a5fa;
+  background-color: rgba(232, 160, 74, 0.12);
+  color: var(--primary);
 }
 
 .badge-warning {
-  background-color: rgba(234, 179, 8, 0.2);
-  color: #facc15;
-}
-
-.link {
+  background-color: rgba(232, 160, 74, 0.12);
   color: var(--primary);
-  text-decoration: underline;
 }
 
-.link:hover {
-  color: #60a5fa;
+/* Divider */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(240, 239, 232, 0.12);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(240, 239, 232, 0.2);
 }
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.3s ease-out;
+  animation: fadeIn 0.25s ease-out;
 }
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  50% { opacity: 0.4; }
 }
 
 .animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Mono */
+.mono {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", monospace;
+  font-size: 0.8125rem;
 }
