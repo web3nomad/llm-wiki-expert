@@ -135,6 +135,24 @@ export async function updateExpert(id: string, data: Partial<Expert>): Promise<E
   return updated;
 }
 
+/**
+ * Append an entry to the expert's log.md
+ * Format: ## [YYYY-MM-DD] operation | title
+ */
+export async function appendLog(
+  expertId: string,
+  operation: 'ingest' | 'query' | 'lint' | 'export',
+  title: string
+): Promise<void> {
+  const logPath = path.join(DATA_DIR, expertId, 'log.md');
+  const date = new Date().toISOString().slice(0, 10);
+  const entry = `\n## [${date}] ${operation} | ${title}\n`;
+  if (!fs.existsSync(logPath)) {
+    fs.writeFileSync(logPath, '# Log\n\nAppend-only record of wiki operations.\n');
+  }
+  fs.appendFileSync(logPath, entry);
+}
+
 export async function deleteExpert(id: string): Promise<boolean> {
   const expertDir = path.join(DATA_DIR, id);
   if (!fs.existsSync(expertDir)) return false;
@@ -257,6 +275,10 @@ ${extract.entities.map((e) => `- ${e}`).join('\n')}
 
   // Update concepts with the new extract
   await updateConcepts(expertId);
+
+  // Log the ingest
+  const preview = content.slice(0, 60).replace(/\n/g, ' ');
+  await appendLog(expertId, 'ingest', preview);
 
   return { sourceId, extract };
 }
@@ -381,6 +403,9 @@ export async function generateResponse(
   if (result.detectedGaps.length > 0) {
     await addDetectedGaps(expertId, result.detectedGaps);
   }
+
+  // Log the query
+  await appendLog(expertId, 'query', userMessage.slice(0, 80));
 
   return { response: result.response, gaps: result.detectedGaps };
 }
