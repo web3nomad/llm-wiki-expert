@@ -37,7 +37,13 @@ export default function GraphPage() {
   }, [expertId]);
 
   const nodeMap = Object.fromEntries(nodes.map(n => [n.id, n]));
-  const colors = { concept: '#6366f1', entity: '#10b981', principle: '#f59e0b' };
+  const colors = { concept: '#818cf8', entity: '#34d399', principle: '#fbbf24' };
+  // scale node size by connection count
+  const connectionCount: Record<string, number> = {};
+  edges.forEach(e => {
+    connectionCount[e.source] = (connectionCount[e.source] || 0) + 1;
+    connectionCount[e.target] = (connectionCount[e.target] || 0) + 1;
+  });
 
   return (
     <div className="min-h-screen p-6">
@@ -51,31 +57,46 @@ export default function GraphPage() {
           <div className="text-center py-20 text-[var(--muted-foreground)]">Building graph...</div>
         ) : (
           <div className="card p-0 overflow-hidden">
-            <svg ref={svgRef} width="800" height="600" className="w-full" viewBox="0 0 800 600">
+            <svg ref={svgRef} width="800" height="600" className="w-full bg-[#0f1117]" viewBox="0 0 800 600">
+              {/* Glow filter */}
+              <defs>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                  <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
               {/* Edges */}
               {edges.map((e, i) => {
                 const s = nodeMap[e.source], t = nodeMap[e.target];
                 if (!s || !t) return null;
                 return (
                   <line key={i} x1={s.x} y1={s.y} x2={t.x} y2={t.y}
-                    stroke="#e2e8f0" strokeWidth="1" opacity="0.6" />
+                    stroke="#334155" strokeWidth="1.5" opacity="0.7" />
                 );
               })}
               {/* Nodes */}
-              {nodes.map(node => (
+              {nodes.map(node => {
+                const conns = connectionCount[node.id] || 0;
+                const r = Math.max(node.size, 6) + conns * 2;
+                const color = colors[node.type as keyof typeof colors] || '#94a3b8';
+                return (
                 <g key={node.id} onClick={() => setSelected(node)} style={{ cursor: 'pointer' }}>
-                  <circle cx={node.x} cy={node.y} r={node.size}
-                    fill={colors[node.type as keyof typeof colors] || '#94a3b8'}
-                    opacity={selected?.id === node.id ? 1 : 0.8}
-                    stroke={selected?.id === node.id ? '#fff' : 'none'}
-                    strokeWidth="2"
+                  {/* outer glow ring */}
+                  <circle cx={node.x} cy={node.y} r={r + 4}
+                    fill="none" stroke={color} strokeWidth="1" opacity="0.2" />
+                  <circle cx={node.x} cy={node.y} r={r}
+                    fill={color} opacity={selected?.id === node.id ? 1 : 0.85}
+                    filter="url(#glow)"
+                    stroke={selected?.id === node.id ? '#fff' : color}
+                    strokeWidth={selected?.id === node.id ? 2 : 0}
                   />
-                  <text x={node.x} y={(node.y ?? 0) + node.size + 12}
-                    textAnchor="middle" fontSize="10" fill="currentColor" opacity="0.7">
-                    {node.label.length > 18 ? node.label.slice(0, 16) + '…' : node.label}
+                  <text x={node.x} y={(node.y ?? 0) + r + 13}
+                    textAnchor="middle" fontSize="10" fill="#94a3b8" opacity="0.9">
+                    {node.label.length > 16 ? node.label.slice(0, 14) + '…' : node.label}
                   </text>
                 </g>
-              ))}
+                );
+              })}
             </svg>
             <div className="p-4 border-t border-[var(--border)] flex items-center gap-6 text-xs text-[var(--muted-foreground)]">
               <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-indigo-500 inline-block"/> Concept</span>

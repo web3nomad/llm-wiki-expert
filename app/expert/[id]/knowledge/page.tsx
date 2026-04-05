@@ -21,10 +21,25 @@ export default function KnowledgePage() {
   const [newSource, setNewSource] = useState('');
   const [urlInput, setUrlInput] = useState('');
   const [urlLoading, setUrlLoading] = useState(false);
+  const [wikiScore, setWikiScore] = useState<{
+    score: number; label: string;
+    breakdown: { completeness: number; coverage: number; coherence: number };
+    summary: string; entries: number;
+  } | null>(null);
+  const [scoreLoading, setScoreLoading] = useState(false);
 
   useEffect(() => {
     loadWiki();
   }, [expertId]);
+
+  const loadScore = async () => {
+    setScoreLoading(true);
+    try {
+      const res = await fetch(`/api/score?expertId=${expertId}`);
+      if (res.ok) setWikiScore(await res.json());
+    } catch (e) { console.error(e); }
+    finally { setScoreLoading(false); }
+  };
 
   const loadWiki = async () => {
     try {
@@ -236,6 +251,41 @@ export default function KnowledgePage() {
             >
               {saving ? 'Processing...' : 'Auto-Fill Gaps'}
             </button>
+          </div>
+
+          <div className="card">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-semibold">🏆 WikiScore</h3>
+              <button onClick={loadScore} disabled={scoreLoading}
+                className="btn btn-secondary btn-sm text-xs">
+                {scoreLoading ? 'Scoring...' : 'Score'}
+              </button>
+            </div>
+            {wikiScore ? (
+              <div>
+                <div className="flex items-end gap-2 mb-2">
+                  <span className="text-3xl font-bold">{Math.round(wikiScore.score * 100)}</span>
+                  <span className="text-sm text-[var(--muted-foreground)] mb-1">/ 100 · {wikiScore.label}</span>
+                </div>
+                <div className="w-full bg-[var(--secondary)] rounded-full h-1.5 mb-3">
+                  <div className="bg-[var(--primary)] h-1.5 rounded-full transition-all"
+                    style={{ width: `${wikiScore.score * 100}%` }} />
+                </div>
+                <div className="space-y-1 text-xs text-[var(--muted-foreground)]">
+                  {Object.entries(wikiScore.breakdown).map(([k, v]) => (
+                    <div key={k} className="flex justify-between">
+                      <span className="capitalize">{k}</span>
+                      <span>{Math.round((v as number) * 100)}%</span>
+                    </div>
+                  ))}
+                </div>
+                {wikiScore.summary && (
+                  <p className="text-xs text-[var(--muted-foreground)] mt-2 italic">{wikiScore.summary}</p>
+                )}
+              </div>
+            ) : (
+              <p className="text-xs text-[var(--muted-foreground)]">Click Score to evaluate wiki quality</p>
+            )}
           </div>
 
           <div className="card">

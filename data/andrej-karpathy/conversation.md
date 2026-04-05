@@ -28,3 +28,33 @@ This matters for several reasons:
 4. **Future-proofing**: Your data isn't trapped in a single vendor's ecosystem. If an app shuts down or changes its terms, you still have your data in an open, portable format.
 
 In the context of LLM-maintained knowledge bases (like Farzapedia), this approach allows LLMs to continuously update and refine markdown files in your concepts/ directory, creating a persistent, visible, and controllable knowledge repository rather than an opaque system hidden inside a proprietary application.
+
+## User (4/5/2026, 8:03:27 PM)
+
+How is LLM Wiki different from RAG, and why does it matter?
+
+## Assistant (4/5/2026, 8:03:27 PM)
+
+LLM Wiki and RAG represent fundamentally different approaches to building AI-powered knowledge systems.
+
+**Traditional RAG (Retrieval-Augmented Generation)** works by: uploading documents → storing embeddings in a vector database → at query time, retrieving relevant chunks → feeding them to the LLM to generate an answer. The key limitation is that RAG has **no accumulation**—the LLM must rediscover and piece together relevant fragments from scratch on every single query. Cross-document synthesis is difficult, and nothing persists between sessions.
+
+**LLM Wiki** inverts this model. Instead of retrieving from raw documents at query time, the LLM continuously maintains a structured wiki—a collection of markdown files that sit between you and the raw sources. When you ingest new information, the LLM incrementally updates existing wiki pages rather than overwriting them. Knowledge compiles once and stays current.
+
+| Aspect | RAG | LLM Wiki |
+|--------|-----|----------|
+| Knowledge accumulation | None—rediscovers fragments per query | Persistent, compounding between sessions |
+| Cross-references | Created dynamically per query | Already exist in the wiki |
+| Synthesis ability | Struggles across documents | Built-in from linked content |
+| Data storage | Vector databases | Local markdown files |
+
+**Why this matters:** The LLM Wiki approach embodies four principles that make it superior for personal knowledge management:
+
+1. **Explicit** — Knowledge is visible and navigable, not hidden in embeddings
+2. **Yours** — Data stays local on your computer, not in AI provider systems
+3. **File over App** — Simple markdown files are portable and interoperable (works with Obsidian, Cursor, etc.)
+4. **BYOAI** — Use whatever AI model you want via OpenAI-compatible APIs
+
+The practical impact: A single source might touch 10-15 wiki pages during ingestion, updating summaries, entity pages, and cross-references. Over time, your wiki becomes a compounding asset where every query builds on previous work. When you ask the LLM to synthesize information, that answer can itself be filed back into the wiki as a new page—allowing explorations to compound just like ingested sources.
+
+Real-world proof points: FarzaTV transformed 2,500 diary entries, Apple Notes, and iMessages into 400 interconnected articles. The LOTR Memory Explorer converted 480,000 words into 20,000 navigable memories with a visual graph.
