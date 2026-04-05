@@ -183,11 +183,11 @@ export default function KnowledgePage() {
                   await fetch('/api/fetch-url', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ expertId: id, url: urlInput.trim() }),
+                    body: JSON.stringify({ expertId: expertId, url: urlInput.trim() }),
                   });
                   setUrlInput('');
                   // refresh wiki content
-                  const r = await fetch(`/api/experts/${id}/wiki`);
+                  const r = await fetch(`/api/experts/${expertId}/wiki`);
                   const d = await r.json();
                   setContent(d);
                 } finally {
