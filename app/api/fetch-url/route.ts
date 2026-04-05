@@ -2,6 +2,45 @@ import { NextRequest, NextResponse } from 'next/server';
 import { addSource, getWikiContent, updateWikiContent, getExpert } from '@/lib/wiki-engine';
 import { callLLM } from '@/lib/llm';
 
+const CHUNK_SIZE = 4000;
+
+// Split long text into overlapping chunks to preserve context at boundaries
+function chunkText(text: string, chunkSize = CHUNK_SIZE): string[] {
+  if (text.length <= chunkSize) return [text];
+  const chunks: string[] = [];
+  let i = 0;
+  while (i < text.length) {
+    chunks.push(text.slice(i, i + chunkSize));
+    i += chunkSize - 400; // 400-char overlap
+  }
+  return chunks;
+}
+
+// Extract knowledge from each chunk, then merge with a final LLM pass
+async function extractWithChunking(text: string, url: string): Promise<string> {
+  const chunks = chunkText(text);
+  if (chunks.length === 1) {
+    return callLLM(
+      `Extract key knowledge and insights from this web page. Format as clean markdown for a wiki.\nSource: ${url}\n\n${text}`,
+      { maxTokens: 2048, temperature: 0.3 }
+    );
+  }
+  // Process each chunk
+  const partials = await Promise.all(
+    chunks.map((chunk, i) =>
+      callLLM(
+        `Extract key facts and insights from this section (${i + 1}/${chunks.length}) of a web page.\nSource: ${url}\n\n${chunk}`,
+        { maxTokens: 1024, temperature: 0.3 }
+      )
+    )
+  );
+  // Final merge pass
+  return callLLM(
+    `Merge these ${chunks.length} partial extracts from the same page into one clean wiki entry. Remove duplicates, keep structure.\nSource: ${url}\n\n${partials.map((p, i) => `## Part ${i + 1}\n${p}`).join('\n\n')}`,
+    { maxTokens: 2048, temperature: 0.3 }
+  );
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { expertId, url } = await request.json();
@@ -34,16 +73,8 @@ export async function POST(request: NextRequest) {
       .trim()
       .slice(0, 8000); // limit to avoid token overflow
 
-    // Ask LLM to extract key knowledge from the page
-    const extracted = await callLLM(
-      `Extract the key knowledge, insights, and facts from this web page content. 
-Format as clean markdown suitable for a wiki knowledge base.
-Source URL: ${url}
-
-PAGE CONTENT:
-${text}`,
-      { maxTokens: 2048, temperature: 0.3 }
-    );
+    // Extract with chunking support for long pages
+    const extracted = await extractWithChunking(text, url);
 
     // Add to wiki
     const sourceContent = `# From URL: ${url}\n\n${extracted}`;
