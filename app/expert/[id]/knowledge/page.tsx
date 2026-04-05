@@ -202,19 +202,19 @@ export default function KnowledgePage() {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-[var(--muted-foreground)]">Definitions</span>
-                <span>{content.definitions.split('\n').filter(l => l.trim()).length} items</span>
+                <span>{(content.definitions || "").split('\n').filter(l => l.trim()).length} items</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[var(--muted-foreground)]">Taxonomy</span>
-                <span>{content.taxonomy.split('\n').filter(l => l.trim()).length} items</span>
+                <span>{(content.taxonomy || "").split('\n').filter(l => l.trim()).length} items</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[var(--muted-foreground)]">Connections</span>
-                <span>{content.connections.split('\n').filter(l => l.trim()).length} items</span>
+                <span>{(content.connections || "").split('\n').filter(l => l.trim()).length} items</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[var(--muted-foreground)]">Gaps</span>
-                <span className="text-yellow-500">{content.gaps.split('\n').filter(l => l.trim()).length} detected</span>
+                <span className="text-yellow-500">{(content.gaps || "").split('\n').filter(l => l.trim()).length} detected</span>
               </div>
             </div>
           </div>

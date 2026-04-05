@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.6; }
+        h1 { font-size: 28px; margin-bottom: 20px; }
+        h2 { font-size: 22px; margin-top: 30px; margin-bottom: 15px; }
+        h3 { font-size: 18px; margin-top: 25px; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 14px; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 8px; overflow-x: auto; }
+        blockquote { border-left: 4px solid #ddd; padding-left: 16px; margin: 16px 0; color: #666; }
+    </style>
+</head>
+<body>
+    <h1>I Built Karpathy's LLM Wiki Idea — And Open Sourced It</h1>
+    
+    <p>A few weeks ago, Andrej Karpathy shared a fascinating idea: what if LLMs had their own continuously-updating knowledge bases, instead of relying on RAG?</p>
+    
+    <p>The core insight: instead of "search-then-read" (RAG), let the LLM continuously update a structured wiki. Each piece of content gets processed into both a source file and an extract. Then, the LLM incrementally updates concept files — definitions, entities, sources, comparisons — by merging new knowledge rather than replacing it.</p>
+    
+    <p>I decided to build it. Here's what I learned.</p>
+    
+    <h2>The Architecture</h2>
+    
+    <pre><code>/data/[expert-id]/
+├── sources/
+│   ├── 2026-04-05-xxx/
+│   │   ├── source.md    # Original content
+│   │   └── extract.md   # LLM-generated summary
+├── concepts/
+│   ├── definitions.md   # AI-maintained definitions
+│   ├── entities.md      # Named entities, people, topics
+│   ├── sources.md       # Source references
+│   └── comparisons.md   # Comparisons, contrasts
+├── gaps.md              # Knowledge gaps (auto-detected)
+└── conversation.md      # Chat history</code></pre>
+    
+    <h2>Key Functions</h2>
+    
+    <p><strong>addSource()</strong> — Creates source.md + extract.md</p>
+    <ul>
+        <li>Saves original content with timestamp</li>
+        <li>Calls LLM to generate structured extract (summary, key points, entities)</li>
+        <li>Triggers concept update</li>
+    </ul>
+    
+    <p><strong>updateConcepts()</strong> — Incremental merge (not replace!)</p>
+    <ul>
+        <li>Reads ALL existing extracts</li>
+        <li>Reads current concept files</li>
+        <li>Calls LLM to merge new knowledge into each concept</li>
+        <li>This is the magic: knowledge compounds over time</li>
+    </ul>
+    
+    <p><strong>generateResponse()</strong> — Context-aware answers</p>
+    <ul>
+        <li>Reads relevant concepts/sources</li>
+        <li>Generates response using wiki context</li>
+        <li>Detects gaps: if LLM mentions missing info, logs it</li>
+    </ul>
+    
+    <p><strong>autoFillGap()</strong> — Self-improving system</p>
+    <ul>
+        <li>Takes a detected gap</li>
+        <li>Calls LLM to generate knowledge about it</li>
+        <li>Adds as new source</li>
+        <li>Updates concepts</li>
+    </ul>
+    
+    <h2>Why This Matters</h2>
+    
+    <p><strong>RAG has fundamental limitations:</strong></p>
+    <ul>
+        <li>Chunking loses context</li>
+        <li>Embeddings miss semantic nuance</li>
+        <li>No memory of what the model doesn't know</li>
+    </ul>
+    
+    <p><strong>This wiki approach:</strong></p>
+    <ul>
+        <li>Compounds knowledge over time</li>
+        <li>Self-identifies gaps</li>
+        <li>Generates context from first principles</li>
+    </ul>
+    
+    <h2>Try It</h2>
+    
+    <p><strong>Open source: <a href="https://github.com/web3nomad/llm-wiki-expert">github.com/web3nomad/llm-wiki-expert</a></strong></p>
+    
+    <p>It's a Next.js app. Set ANTHROPIC_API_KEY, add some sources, and chat with your expert.</p>
+    
+    <p>This is just the beginning. A small experiment. Would love to hear thoughts, feedback, and see what others build.</p>
+    
+    <p>@karpathy</p>
+    
+    <hr>
+    <p><em>Building in public. More to come.</em></p>
+</body>
+</html>

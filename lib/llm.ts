@@ -1,7 +1,8 @@
-import Anthropic from '@anthropic-ai/sdk';
+import OpenAI from 'openai';
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
+const openai = new OpenAI({
+  baseURL: process.env.LLM_BASE_URL || 'https://api.ppio.com/openai/v1',
+  apiKey: process.env.LLM_API_KEY || '',
 });
 
 export interface LLMResponse {
@@ -25,16 +26,19 @@ export async function callLLM(
     temperature?: number;
   }
 ): Promise<string> {
-  const model = options?.model || 'claude-sonnet-4-20250514';
+  const model = options?.model || process.env.LLM_MODEL || 'minimax/minimax-m2.5';
   const maxTokens = options?.maxTokens || 4096;
   const temperature = options?.temperature || 0.7;
 
-  const response = await anthropic.messages.create({
+  const response = await openai.chat.completions.create({
     model,
     max_tokens: maxTokens,
     temperature,
-    system: options?.system || 'You are a helpful AI assistant.',
     messages: [
+      {
+        role: 'system',
+        content: options?.system || 'You are a helpful AI assistant.',
+      },
       {
         role: 'user',
         content: prompt,
@@ -42,13 +46,12 @@ export async function callLLM(
     ],
   });
 
-  // Extract text from the response
-  const textContent = response.content.find((block) => block.type === 'text');
-  if (!textContent || textContent.type !== 'text') {
+  const content = response.choices[0]?.message?.content;
+  if (!content) {
     throw new Error('No text content in LLM response');
   }
 
-  return textContent.text;
+  return content;
 }
 
 /**

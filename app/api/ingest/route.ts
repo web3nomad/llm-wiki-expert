@@ -1,10 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { addSource, getWikiContent, updateWikiContent, autoFillGap, getExpert } from '@/lib/wiki-engine';
+import { callLLM } from '@/lib/llm';
+
+// Convert AI conversation format into wiki-ready source content
+function formatConversation(messages: {role: string, content: string}[]): string {
+  const formatted = messages
+    .map(m => `[${m.role.toUpperCase()}]: ${m.content}`)
+    .join('\n\n');
+  return `# Conversation Import\n\n${formatted}`;
+}
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { expertId, content, action } = body;
+    const { expertId, content, action, conversation } = body;
 
     if (!expertId) {
       return NextResponse.json({ error: 'Expert ID is required' }, { status: 400 });
@@ -31,6 +40,20 @@ export async function POST(request: NextRequest) {
       }
       
       return NextResponse.json({ success: true, filledCount: gapLines.length });
+    }
+
+    // Handle conversation import (AI conversation → wiki)
+    if (action === 'importConversation' && conversation) {
+      const formatted = formatConversation(conversation);
+      // Ask LLM to extract key insights from the conversation
+      const extracted = await callLLM(
+        `Extract the key knowledge, insights, and facts from this AI conversation. Format as clean markdown suitable for a wiki knowledge base.\n\n${formatted}`,
+        { maxTokens: 2048, temperature: 0.3 }
+      );
+      await addSource(expertId, extracted);
+      const wiki = await getWikiContent(expertId);
+      await updateWikiContent(expertId, 'definitions', wiki.definitions + `\n\n## From conversation (${new Date().toISOString().split('T')[0]})\n\n${extracted}`);
+      return NextResponse.json({ success: true, source: 'conversation' });
     }
 
     // Handle content ingestion
